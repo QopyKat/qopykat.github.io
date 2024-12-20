@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>WoW Classic Randomizer</title>
+  <link rel="stylesheet" type="text/css" href="pico.min.css">
+</head>
+
+<body>
+  <main class="container">
+    <article>
+      <h1>WoW Classic Party Character Randomizer</h1>
+
+      <div class="grid">
+
+        <div> <!-- Left -->
+          <!-- Faction Selection -->
+          <h4>Faction</h4>
+          <select id="faction" name="faction" aria-label="Faction" required style="width: fit-content;">
+            <option>Random</option>
+            <option>Alliance</option>
+            <option>Horde</option>
+          </select>
+          
+          <!-- Party Size -->
+          <h4>Party Size</h4>
+          <select id="party_size" name="party_size" aria-label="Party Size" required style="width: fit-content;">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option selected>4</option>
+            <option>5</option>
+          </select>
+
+          <!-- Number of Healers -->
+          <h4>Number of Healers</h4>
+          <select id="num_healers" name="num_healers" aria-label="Number of Healers" required style="width: fit-content;">
+            <option>Random</option>
+            <option>0</option>
+            <option selected>1</option>
+            <option>2</option>
+          </select>
+          
+          <!-- Number of Tanks -->
+          <h4>Number of Tanks</h4>
+          <select id="num_tanks" name="num_tanks" aria-label="Number of Tanks" required style="width: fit-content;">
+            <option>Random</option>
+            <option>0</option>
+            <option selected>1</option>
+            <option>2</option>
+          </select>
+        </div> <!-- Left -->
+
+        <div> <!-- Right -->
+          <h4>Generator Flags</h4>
+          <!-- Allow Duplicates Specs -->
+          <div style="margin-bottom: 10px;">
+            <input type="checkbox" id="allow_duplicate_specs" name="allow_duplicate_specs" role="switch" aria-label="Allow Duplicate Specs">
+            <span style="margin-left: 10px;">Allow Duplicate Specs</span>
+          </div>
+
+          <!-- Allow Duplicates Classes -->
+          <div style="margin-bottom: 10px;">
+            <input type="checkbox" id="allow_duplicate_classes" name="allow_duplicate_classes" role="switch" aria-label="Allow Duplicate Classes">
+            <span style="margin-left: 10px;">Allow Duplicate Classes</span>
+          </div>
+          
+          <!-- Allow Duplicates Professions -->
+          <div style="margin-bottom: 10px;">
+            <input type="checkbox" id="allow_duplicate_professions" name="allow_duplicate_professions" role="switch" aria-label="Allow Duplicate Professions">
+            <span style="margin-left: 10px;">Allow Duplicate Professions</span>
+          </div>
+
+          <!-- <div>
+            <h4>Character Names</h4>
+            <textarea
+  name="bio"
+  placeholder="Write a professional short bio..."
+  aria-label="Professional short bio"
+>
+</textarea>
+          </div> -->
+        </div> <!-- Right -->
+
+      </div>
+      
+      <button onclick="randomize()">Randomize</button>
+      
+    </article>
+    
+    <article id="generated_characters" style="width: 800px; margin-left: auto; margin-right: auto;">
+      Press Randomize...
+      <!-- <div>
+        <h6>Character 1</h6>
+        <div class="grid">
+          <div style="width: fit-content;">
+            Alliance<br>
+            <img src="./images/alliance.png" alt="Alliance" style="display: block; margin: 0 auto;">
+          </div>
+          <div style="width: fit-content;">
+            Night Elf<br>
+            <img src="./images/races/night_elf.png" alt="Druid" style="display: block; margin: 0 auto;">
+          </div>
+          <div style="width: fit-content;">
+            Druid<br>
+            <img src="./images/classes/druid/druid.png" alt="Druid" style="display: block; margin: 0 auto;">
+          </div>
+          <div style="width: fit-content;">
+            Feral<br>
+            <img src="./images/classes/druid/feral.png" alt="Feral" style="display: block; margin: 0 auto;">
+          </div>
+          <div style="width: fit-content;">
+            Alchemy<br>
+            <img src="./images/profs/alchemy.png" alt="Alchemy" style="display: block; margin: 0 auto;">
+          </div>
+        </div>
+      </div> -->
+    </article>
+
+    <script>
+      class Character {
+        constructor(cls, spec, race = null, prof = null, name = null, faction = null) {
+          this.cls = cls;
+          this.spec = spec;
+          this.race = race;
+          this.prof = prof;
+          this.name = name;
+          this.faction = faction;
+        }
+
+        clone() {
+          return new Character(this.cls, this.spec, this.race, this.prof);
+        }
+      }
+
+      var TANKS = [
+        new Character("warrior", "protection"),
+        new Character("paladin", "protection"),
+        new Character("druid", "guardian"),
+      ]
+      var HEALERS = [
+        new Character("paladin", "holy"),
+        new Character("druid", "restoration"),
+        new Character("priest", "holy"),
+        new Character("shaman", "restoration"),
+      ]
+      var DAMAGE_DEALERS = [
+        new Character("warrior", "arms"),
+        new Character("warrior", "fury"),
+        new Character("paladin", "retribution"),
+        new Character("druid", "feral"),
+        new Character("druid", "balance"),
+        new Character("hunter", "beast_mastery"),
+        new Character("hunter", "marksmanship"),
+        new Character("hunter", "survival"),
+        new Character("mage", "arcane"),
+        new Character("mage", "fire"),
+        new Character("mage", "frost"),
+        new Character("rogue", "assassination"),
+        new Character("rogue", "combat"),
+        new Character("rogue", "subtlety"),
+        new Character("priest", "shadow"),
+        new Character("priest", "discipline"),
+        new Character("shaman", "elemental"),
+        new Character("shaman", "enhancement"),
+        new Character("warlock", "affliction"),
+        new Character("warlock", "demonology"),
+        new Character("warlock", "destruction"),
+      ]
+      var RACE_CLASSES = {
+        "human": ["warrior", "paladin", "rogue", "priest", "mage", "warlock"],
+        "dwarf": ["warrior", "paladin", "hunter", "rogue", "priest"],
+        "night_elf": ["warrior", "hunter", "rogue", "priest", "druid"],
+        "gnome": ["warrior", "rogue", "mage", "warlock"],
+        "orc": ["warrior", "hunter", "rogue", "shaman", "warlock"],
+        "undead": ["warrior", "rogue", "priest", "mage", "warlock"],
+        "tauren": ["warrior", "hunter", "shaman", "druid"],
+        "troll": ["warrior", "hunter", "rogue", "priest", "shaman", "mage"],
+      }
+      var FACTION_RACES = {
+        "alliance": ["human", "dwarf", "night_elf", "gnome"],
+        "horde": ["orc", "undead", "tauren", "troll"],
+      }
+      var PROFESSIONS = [
+        "alchemy",
+        "blacksmithing",
+        "enchanting",
+        "engineering",
+        "leatherworking",
+        "tailoring",
+      ]
+
+      function get_classes_for_races(races) {
+        var classes = new Set();
+
+        races.forEach(r => {
+          classes = classes.union(new Set(RACE_CLASSES[r]))
+        });
+
+        return Array.from(classes);
+      }
+
+      function random_choice_char(chars_all, k = 1, replace_classes = false, replace_specs = false) {
+        var chars_all = Array.from(chars_all);
+        var choices = [];
+
+        if(k == 0)
+          return choices;
+
+        for(var i = 0; i < k; i++) {
+          assert(chars_all.length > 0, "Not enough characters to choose from");
+
+          var j = Math.floor(Math.random() * chars_all.length);
+          var choice = chars_all[j].clone();
+          choices.push(choice);
+
+          if(!replace_classes) {
+            chars_all = chars_all.filter(char => char.cls != choice.cls);
+          }
+          else if(!replace_specs) {
+            chars_all.splice(j, 1);
+          }
+        }
+
+        return choices;
+      }
+
+      function random_choice(array, k = 1, replace = false) {
+        var array = Array.from(array);
+        var choices = [];
+
+        assert(replace || k <= array.length, "Cannot choose more elements than there are in the array");
+
+        if(k == 0)
+          return choices;
+
+        for(var i = 0; i < k; i++) {
+          var j = Math.floor(Math.random() * array.length);
+          console.log(j, array);
+          choices.push(array[j]);
+
+          if(!replace)
+            array.splice(j, 1);
+        }
+        console.log(choices);
+        console.log();
+
+        return choices;
+      }
+
+      function assert(condition, message) {
+        if(!condition) {
+          throw message;
+        }
+      }
+
+      function format_string(str) {
+        return str.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+      }
+
+      function create_character_card(char) {
+        return `
+        <div>
+          <h6>${char.name}</h6>
+          <div class="grid">
+            <div style="width: fit-content;">
+              ${format_string(char.faction)}<br>
+              <img src="./images/${char.faction}.png" alt="${char.faction}" style="display: block; margin: 0 auto;">
+            </div>
+            <div style="width: fit-content;">
+              ${format_string(char.race)}<br>
+              <img src="./images/races/${char.race}.png" alt="${char.race}" style="display: block; margin: 0 auto;">
+            </div>
+            <div style="width: fit-content;">
+              ${format_string(char.cls)}<br>
+              <img src="./images/classes/${char.cls}/${char.cls}.png" alt="${char.cls}" style="display: block; margin: 0 auto;">
+            </div>
+            <div style="width: fit-content;">
+              ${format_string(char.spec)}<br>
+              <img src="./images/classes/${char.cls}/${char.spec}.png" alt="${char.spec}" style="display: block; margin: 0 auto;">
+            </div>
+            <div style="width: fit-content;">
+              ${format_string(char.prof)}<br>
+              <img src="./images/profs/${char.prof}.png" alt="${char.prof}" style="display: block; margin: 0 auto;">
+            </div>
+          </div>
+        </div style="margin-bottom: 10px;">
+        `;
+      }
+
+      function shuffle(array) {
+        array = Array.from(array);
+        arr_new = [];
+
+        while(array.length > 0) {
+          j = Math.floor(Math.random() * array.length);
+          arr_new.push(array[j]);
+          array.splice(j, 1);
+        }
+
+        return arr_new;
+      }
+      
+      function randomize() {
+        var faction = document.getElementById("faction").value.toLowerCase();
+        var party_size = parseInt(document.getElementById("party_size").value);
+        var num_healers = document.getElementById("num_healers").value;
+        var num_tanks = document.getElementById("num_tanks").value;
+        var replace_specs = document.getElementById("allow_duplicate_specs").checked;
+        var replace_classes = document.getElementById("allow_duplicate_classes").checked;
+        var replace_professions = document.getElementById("allow_duplicate_professions").checked;
+
+        if(faction == "random") {
+          // randomly choose faction
+          faction = Math.random() < 0.5 ? "alliance" : "horde";
+        }
+
+        if(num_healers == "Random") {
+          // randomly choose number of healers
+          n = party_size - (num_tanks == "Random" ? 0 : num_tanks);
+          k = (replace_specs & replace_classes) ? n : Math.min(3, n)
+          num_healers = Math.floor(Math.random() * k);
+        }
+        else {
+          num_healers = parseInt(num_healers);
+        }
+
+        if(num_tanks == "Random") {
+          // randomly choose number of tanks
+          n = party_size - num_healers
+          k = (replace_specs & replace_classes) ? n : Math.min(3, n)
+          num_tanks = Math.floor(Math.random() * k);
+        }
+        else {
+          num_tanks = parseInt(num_tanks);
+        }
+
+        assert(num_tanks + num_healers <= party_size, "Not enough party members for the number of tanks and healers");
+
+        // get valid races, classes, etc. for the chosen faction
+        var races = FACTION_RACES[faction];
+        var classes = get_classes_for_races(races);
+        var tanks = TANKS.filter(c => classes.includes(c.cls));
+        var healers = HEALERS.filter(c => classes.includes(c.cls));
+        var damage_dealers = DAMAGE_DEALERS.filter(c => classes.includes(c.cls));
+
+        // randomly choose tank classes / specs
+        tanks = random_choice_char(tanks, num_tanks, replace_classes, replace_specs);
+        if(!replace_classes) {
+          // remove classes already picked for tanks
+          tanks.forEach(char => { healers = healers.filter(c => c.cls != char.cls); });
+        }
+        console.log(healers);
+        
+        // randomly choose healer classes / specs
+        healers = random_choice_char(healers, num_healers, replace_classes, replace_specs);
+        if(!replace_classes) {
+          // remove classes already picked for tanks / healers
+          tanks.forEach(char => { damage_dealers = damage_dealers.filter(c => c.cls != char.cls); });
+          healers.forEach(char => { damage_dealers = damage_dealers.filter(c => c.cls != char.cls); });
+        }
+        
+        // randomly choose damage dealer classes / specs
+        console.log(damage_dealers);
+        damage_dealers = random_choice_char(damage_dealers, party_size - num_tanks - num_healers, replace_classes, replace_specs);
+
+        chars = tanks.concat(healers).concat(damage_dealers);
+        chars = shuffle(chars);
+        
+        // randomly choose race and profession for each character
+        profs = random_choice(PROFESSIONS, party_size, replace_professions);
+        for(var i = 0; i < party_size; i++) {
+          chars[i].faction = faction;
+          chars[i].name = "Character " + (i + 1);
+          chars[i].prof = profs[i];
+          
+          races_cls = races.filter(r => RACE_CLASSES[r].includes(chars[i].cls));
+          j = Math.floor(Math.random() * races_cls.length);
+          chars[i].race = races_cls[j];
+        }
+
+        // create output in html format
+        html = "";
+        chars.forEach(char => {
+          html += create_character_card(char);
+        });
+        document.getElementById("generated_characters").innerHTML = html;
+      }
+    </script>
+  </main>
+</body>
+
+</html>
