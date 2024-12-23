@@ -4,6 +4,100 @@
 <head>
   <title>WoW Classic Randomizer</title>
   <link rel="stylesheet" type="text/css" href="pico.min.css">
+  <style>
+    /* character names table */
+    img.trash {
+      background: url('./images/trash.webp') no-repeat;
+      cursor: pointer;
+      border: none;
+      width: 100px;
+      height: 100px;
+    }
+    button.trash {
+      background-image: url('./images/trash.webp');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center center;
+      cursor: pointer;
+      border: none;
+    }
+    button.trash:hover {
+      background-image: url('./images/trash_hover.webp');
+    }
+    button.trash:active {
+      background-image: url('./images/trash_active.webp');
+    }
+    td.trash {
+      padding-top: 0;
+      padding-bottom: 8px;
+    }
+    table#character_names td:nth-child(2){
+      width: 0;
+      min-width: fit-content;
+    }
+
+    /* advanced settings tables */
+    table#settings_table {
+      width: 100%;
+    }
+    table#settings_table td {
+      padding: 0;
+      background-color: transparent;
+    }
+    table#settings_table h4 {
+      margin-bottom: 0;
+      white-space: nowrap;
+      margin-right: 64px;
+    }
+    table#settings_table span {
+      margin-bottom: 0;
+      margin-right: 16px;
+    }
+    table#settings_table select {
+      margin-bottom: 0;
+    }
+    table#settings_table input {
+      margin-bottom: 0;
+    }
+    table#settings_table td:nth-child(3), td:nth-child(5) {
+      padding-right: 32px;
+    }
+    
+    /* results */
+    #results {
+      width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    #results div.result {
+      width: fit-content;
+    }
+    #result table {
+      table-layout: fixed;
+    }
+    #results tr.spacer {
+      height: 24px;
+    }
+    #results th {
+      font-weight: 600;
+      font-size: 131.25%;
+      color: #c2c7d0;
+    }
+    #results td {
+      border: none;
+      padding-top: 4px;
+    }
+    #results img {
+      display: block;
+      margin: 0 auto;
+    }
+    #results span {
+      display: block;
+      margin: 0 auto;
+      text-align: center;
+      width: 100%;
+    }
+  </style>
 </head>
 
 <body>
@@ -14,380 +108,1247 @@
       <div class="grid">
 
         <div> <!-- Left -->
-          <!-- Faction Selection -->
-          <h4>Faction</h4>
-          <select id="faction" name="faction" aria-label="Faction" required style="width: fit-content;">
-            <option>Random</option>
-            <option>Alliance</option>
-            <option>Horde</option>
-          </select>
-          
-          <!-- Party Size -->
-          <h4>Party Size</h4>
-          <select id="party_size" name="party_size" aria-label="Party Size" required style="width: fit-content;">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option selected>4</option>
-            <option>5</option>
-          </select>
 
-          <!-- Number of Healers -->
-          <h4>Number of Healers</h4>
-          <select id="num_healers" name="num_healers" aria-label="Number of Healers" required style="width: fit-content;">
-            <option>Random</option>
-            <option>0</option>
-            <option selected>1</option>
-            <option>2</option>
-          </select>
-          
-          <!-- Number of Tanks -->
-          <h4>Number of Tanks</h4>
-          <select id="num_tanks" name="num_tanks" aria-label="Number of Tanks" required style="width: fit-content;">
-            <option>Random</option>
-            <option>0</option>
-            <option selected>1</option>
-            <option>2</option>
-          </select>
+          <div>
+            <h4 style="margin-bottom: 16px;">Character Names</h4>
+            <input type="text" placeholder="Enter Character Name..." style="width: 50%;" onkeydown="add_char_name(this)">
+            <table id="character_names" style="width: 50%;">
+              <tr>
+                <td>Meteo</td>
+                <td class="trash"><button class='outline trash' onclick='remove_char_name(this)'></td>
+              </tr>
+              <tr>
+                <td>Miki</td>
+                <td class="trash"><button class='outline trash' onclick='remove_char_name(this)'></td>
+              </tr>
+              <tr>
+                <td>Qopy</td>
+                <td class="trash"><button class='outline trash' onclick='remove_char_name(this)'></td>
+              </tr>
+              <tr>
+                <td>Xnz</td>
+                <td class="trash"><button class='outline trash' onclick='remove_char_name(this)'></td>
+              </tr>
+            </table>
+          </div>
+
         </div> <!-- Left -->
 
         <div> <!-- Right -->
-          <h4>Generator Flags</h4>
-          <!-- Allow Duplicates Specs -->
+
+          <table id="settings_table">
+
+            <!-- Party Size -->
+            <tr>
+              <td>
+                <h4>Party Size</h4>
+              </td>
+              <td></td>
+              <td>
+                <input id="party_size" type="number" value="4" disabled>
+              </td>
+              <td></td>
+              <td></td>
+            </tr>
+
+            <!-- Faction -->
+            <tr>
+              <td>
+                <h4>Faction</h4>
+              </td>
+              <td></td>
+              <td>
+                <select id="faction" onchange="on_faction_changed()">
+                  <option value="random">Random</option>
+                  <option value="alliance">Alliance</option>
+                  <option value="horde">Horde</option>
+                </select>
+              </td>
+              <td></td>
+              <td></td>
+            </tr>
+
+            <!-- Race -->
+            <tr>
+              <td>
+                <h4>Race</h4>
+              </td>
+              <td></td>
+              <td>
+                <select id="race" onchange="on_race_changed()">
+                  <option value="random">Random</option>
+                  <option value="human">Human</option>
+                  <option value="dwarf">Dwarf</option>
+                  <option value="night_elf">Night Elf</option>
+                  <option value="gnome">Gnome</option>
+                  <option value="orc">Orc</option>
+                  <option value="undead">Undead</option>
+                  <option value="tauren">Tauren</option>
+                  <option value="troll">Troll</option>
+                </select>
+              </td>
+              <td colspan="2" id="race_message" style="visibility: hidden;"><span>(Dwarfs as Healers)</span></td>
+            </tr>
+            
+            <!-- Tanks -->
+            <tr>
+              <td>
+                <h4>Tanks</h4>
+              </td>
+              <td><span>Min</span></td>
+              <td>
+                <input id="num_tank_min" type="number" value="1" onchange="on_min_tank_changed()">
+              </td>
+              <td><span>Max</span></td>
+              <td>
+                <input id="num_tank_max" type="number" value="1" onchange="on_max_tank_changed()">
+              </td>
+            </tr>
+            
+            <!-- Healers -->
+            <tr>
+              <td>
+                <h4>Healers</h4>
+              </td>
+              <td><span>Min</span></td>
+              <td>
+                <input id="num_heal_min" type="number" value="1" onchange="on_min_heal_changed()">
+              </td>
+              <td><span>Max</span></td>
+              <td>
+                <input id="num_heal_max" type="number" value="1" onchange="on_max_heal_changed()">
+              </td>
+            </tr>
+          </table>
+
+          <!-- <h4>Generator Flags</h4> -->
+
+          <!-- Avoid Duplicates Specs -->
           <div style="margin-bottom: 10px;">
-            <input type="checkbox" id="allow_duplicate_specs" name="allow_duplicate_specs" role="switch" aria-label="Allow Duplicate Specs">
-            <span style="margin-left: 10px;">Allow Duplicate Specs</span>
+            <input id="avoid_duplicate_specs" type="checkbox" role="switch" checked>
+            <span style="margin-left: 10px;">Avoid Duplicate Specs</span>
           </div>
 
-          <!-- Allow Duplicates Classes -->
+          <!-- Avoid Duplicates Classes -->
           <div style="margin-bottom: 10px;">
-            <input type="checkbox" id="allow_duplicate_classes" name="allow_duplicate_classes" role="switch" aria-label="Allow Duplicate Classes">
-            <span style="margin-left: 10px;">Allow Duplicate Classes</span>
+            <input id="avoid_duplicate_classes" type="checkbox" role="switch" onchange="on_duplicate_classes_changed()" checked>
+            <span style="margin-left: 10px;">Avoid Duplicate Classes</span>
+          </div>
+
+          <!-- Avoid Duplicates Classes Across Roles -->
+          <div style="margin-bottom: 10px;">
+            <input id="avoid_duplicate_classes_across_roles" type="checkbox" role="switch" onchange="on_duplicate_classes_across_roles_changed()" checked>
+            <span style="margin-left: 10px;">Avoid Duplicate Classes Across Roles</span>
           </div>
           
-          <!-- Allow Duplicates Professions -->
+          <!-- Avoid Duplicates Professions -->
           <div style="margin-bottom: 10px;">
-            <input type="checkbox" id="allow_duplicate_professions" name="allow_duplicate_professions" role="switch" aria-label="Allow Duplicate Professions">
-            <span style="margin-left: 10px;">Allow Duplicate Professions</span>
+            <input id="avoid_duplicate_professions" type="checkbox" role="switch" checked>
+            <span style="margin-left: 10px;">Avoid Duplicate Professions</span>
+          </div>
+          
+          <!-- Sensible Class - Profession Combinations -->
+          <div style="margin-bottom: 10px;">
+            <input id="use_prof_class_combo" type="checkbox" role="switch" checked>
+            <span style="margin-left: 10px;">Sensible Class - Profession Combinations</span>
+          </div>
+          
+          <!-- Use Single Race -->
+          <div style="margin-bottom: 10px;">
+            <input id="use_single_race" type="checkbox" role="switch" checked>
+            <span style="margin-left: 10px;">Use Single Race</span>
+          </div>
+          
+          <!-- Use per Class Probabilities -->
+          <div style="margin-bottom: 10px;">
+            <input id="use_per_class_probabilities" type="checkbox" role="switch" checked>
+            <span style="margin-left: 10px;">Use per Class Probabilities</span>
           </div>
 
-          <!-- <div>
-            <h4>Character Names</h4>
-            <textarea
-  name="bio"
-  placeholder="Write a professional short bio..."
-  aria-label="Professional short bio"
->
-</textarea>
-          </div> -->
         </div> <!-- Right -->
 
       </div>
+
+      <!-- Advanced Settings -->
+      <details>
+        <summary>Advanced Settings</summary>
+        <div>
+          
+          <h4>Tank Specs</h4>
+          <table id="tank_specs" class="striped" style="font-size: 60%;">
+            <thead>
+              <tr>
+                <th>Warrior</th>
+                <th>Paladin</th>
+                <th>Hunter</th>
+                <th>Rogue</th>
+                <th>Priest</th>
+                <th>Shaman</th>
+                <th>Druid</th>
+                <th>Mage</th>
+                <th>Warlock</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="checkbox">Arms</td>
+                <td><input type="checkbox">Holy</td>
+                <td><input type="checkbox">Beast Mastery</td>
+                <td><input type="checkbox">Assassination</td>
+                <td><input type="checkbox">Discipline</td>
+                <td><input type="checkbox">Elemental</td>
+                <td><input type="checkbox">Balance</td>
+                <td><input type="checkbox">Arcane</td>
+                <td><input type="checkbox">Affliction</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox">Fury</td>
+                <td><input type="checkbox" checked>Protection</td>
+                <td><input type="checkbox">Marksmanship</td>
+                <td><input type="checkbox">Combat</td>
+                <td><input type="checkbox">Holy</td>
+                <td><input type="checkbox">Enhancement</td>
+                <td><input type="checkbox">Feral</td>
+                <td><input type="checkbox">Fire</td>
+                <td><input type="checkbox">Demonology</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" checked>Protection</td>
+                <td><input type="checkbox">Retribution</td>
+                <td><input type="checkbox">Survival</td>
+                <td><input type="checkbox">Subtlety</td>
+                <td><input type="checkbox">Shadow</td>
+                <td><input type="checkbox">Restoration</td>
+                <td><input type="checkbox" checked>Guardian</td>
+                <td><input type="checkbox">Frost</td>
+                <td><input type="checkbox">Destruction</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" checked>Fury/Prot</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><input type="checkbox">Restoration</td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table> <!-- Tank Specs -->
+          
+          <h4>Heal Specs</h4>
+          <table id="heal_specs" class="striped" style="font-size: 60%;">
+            <thead>
+              <tr>
+                <th>Warrior</th>
+                <th>Paladin</th>
+                <th>Hunter</th>
+                <th>Rogue</th>
+                <th>Priest</th>
+                <th>Shaman</th>
+                <th>Druid</th>
+                <th>Mage</th>
+                <th>Warlock</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="checkbox">Arms</td>
+                <td><input type="checkbox" checked>Holy</td>
+                <td><input type="checkbox">Beast Mastery</td>
+                <td><input type="checkbox">Assassination</td>
+                <td><input type="checkbox">Discipline</td>
+                <td><input type="checkbox">Elemental</td>
+                <td><input type="checkbox">Balance</td>
+                <td><input type="checkbox">Arcane</td>
+                <td><input type="checkbox">Affliction</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox">Fury</td>
+                <td><input type="checkbox">Protection</td>
+                <td><input type="checkbox">Marksmanship</td>
+                <td><input type="checkbox">Combat</td>
+                <td><input type="checkbox" checked>Holy</td>
+                <td><input type="checkbox">Enhancement</td>
+                <td><input type="checkbox">Feral</td>
+                <td><input type="checkbox">Fire</td>
+                <td><input type="checkbox">Demonology</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox">Protection</td>
+                <td><input type="checkbox">Retribution</td>
+                <td><input type="checkbox">Survival</td>
+                <td><input type="checkbox">Subtlety</td>
+                <td><input type="checkbox">Shadow</td>
+                <td><input type="checkbox" checked>Restoration</td>
+                <td><input type="checkbox">Guardian</td>
+                <td><input type="checkbox">Frost</td>
+                <td><input type="checkbox">Destruction</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox">Fury/Prot</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><input type="checkbox" checked>Restoration</td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table> <!-- Heal Specs -->
+          
+          <h4>Damage Specs</h4>
+          <table id="damage_specs" class="striped" style="font-size: 60%;">
+            <thead>
+              <tr>
+                <th>Warrior</th>
+                <th>Paladin</th>
+                <th>Hunter</th>
+                <th>Rogue</th>
+                <th>Priest</th>
+                <th>Shaman</th>
+                <th>Druid</th>
+                <th>Mage</th>
+                <th>Warlock</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="checkbox" checked>Arms</td>
+                <td><input type="checkbox">Holy</td>
+                <td><input type="checkbox" checked>Beast Mastery</td>
+                <td><input type="checkbox" checked>Assassination</td>
+                <td><input type="checkbox">Discipline</td>
+                <td><input type="checkbox" checked>Elemental</td>
+                <td><input type="checkbox" checked>Balance</td>
+                <td><input type="checkbox" checked>Arcane</td>
+                <td><input type="checkbox" checked>Affliction</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" checked>Fury</td>
+                <td><input type="checkbox">Protection</td>
+                <td><input type="checkbox" checked>Marksmanship</td>
+                <td><input type="checkbox" checked>Combat</td>
+                <td><input type="checkbox">Holy</td>
+                <td><input type="checkbox" checked>Enhancement</td>
+                <td><input type="checkbox" checked>Feral</td>
+                <td><input type="checkbox" checked>Fire</td>
+                <td><input type="checkbox" checked>Demonology</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox">Protection</td>
+                <td><input type="checkbox" checked>Retribution</td>
+                <td><input type="checkbox">Survival</td>
+                <td><input type="checkbox" checked>Subtlety</td>
+                <td><input type="checkbox" checked>Shadow</td>
+                <td><input type="checkbox">Restoration</td>
+                <td><input type="checkbox">Guardian</td>
+                <td><input type="checkbox" checked>Frost</td>
+                <td><input type="checkbox" checked>Destruction</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox">Fury/Prot</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><input type="checkbox">Restoration</td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table> <!-- Damage Specs -->
+          
+          <h4>Class / Race Combinations</h4>
+          <table id="class_race_combos" class="striped" style="font-size: 60%;">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Warrior</th>
+                <th>Paladin</th>
+                <th>Hunter</th>
+                <th>Rogue</th>
+                <th>Priest</th>
+                <th>Shaman</th>
+                <th>Druid</th>
+                <th>Mage</th>
+                <th>Warlock</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Human</td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td></td>
+                <td></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+              </tr>
+              <tr>
+                <td>Dwarf</td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Night Elf</td>
+                <td><input type="checkbox" checked></td>
+                <td></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td></td>
+                <td><input type="checkbox" checked></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Gnome</td>
+                <td><input type="checkbox" checked></td>
+                <td></td>
+                <td></td>
+                <td><input type="checkbox" checked></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+              </tr>
+              <tr>
+                <td>Orc</td>
+                <td><input type="checkbox" checked></td>
+                <td></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td></td>
+                <td><input type="checkbox" checked></td>
+                <td></td>
+                <td></td>
+                <td><input type="checkbox" checked></td>
+              </tr>
+              <tr>
+                <td>Undead</td>
+                <td><input type="checkbox" checked></td>
+                <td></td>
+                <td></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td></td>
+                <td></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+              </tr>
+              <tr>
+                <td>Tauren</td>
+                <td><input type="checkbox" checked></td>
+                <td></td>
+                <td><input type="checkbox" checked></td>
+                <td></td>
+                <td></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Troll</td>
+                <td><input type="checkbox" checked></td>
+                <td></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td></td>
+                <td><input type="checkbox" checked></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table> <!-- Class / Race Combinations -->
+          
+          <h4>Class / Profession Combinations</h4>
+          <table id="class_prof_combos" class="striped" style="font-size: 60%;">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Warrior</th>
+                <th>Paladin</th>
+                <th>Hunter</th>
+                <th>Rogue</th>
+                <th>Priest</th>
+                <th>Shaman</th>
+                <th>Druid</th>
+                <th>Mage</th>
+                <th>Warlock</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Alchemy</td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+              </tr>
+              <tr>
+                <td>Blacksmithing</td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox"></td>
+                <td><input type="checkbox"></td>
+                <td><input type="checkbox"></td>
+                <td><input type="checkbox"></td>
+                <td><input type="checkbox"></td>
+                <td><input type="checkbox"></td>
+                <td><input type="checkbox"></td>
+              </tr>
+              <tr>
+                <td>Enchanting</td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+              </tr>
+              <tr>
+                <td>Engineering</td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+              </tr>
+              <tr>
+                <td>Leatherworking</td>
+                <td><input type="checkbox"></td>
+                <td><input type="checkbox"></td>
+                <td><input type="checkbox"></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox"></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox"></td>
+                <td><input type="checkbox"></td>
+              </tr>
+              <tr>
+                <td>Tailoring</td>
+                <td><input type="checkbox"></td>
+                <td><input type="checkbox"></td>
+                <td><input type="checkbox"></td>
+                <td><input type="checkbox"></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox"></td>
+                <td><input type="checkbox"></td>
+                <td><input type="checkbox" checked></td>
+                <td><input type="checkbox" checked></td>
+              </tr>
+            </tbody>
+          </table> <!-- Class / Profession Combinations -->
+
+        </div>
+      </details>
       
       <button onclick="randomize()">Randomize</button>
       
     </article>
     
-    <article id="generated_characters" style="width: 800px; margin-left: auto; margin-right: auto;">
+    <article id="results">
       Press Randomize...
-      <!-- <div>
-        <h6>Character 1</h6>
-        <div class="grid">
-          <div style="width: fit-content;">
-            Alliance<br>
-            <img src="./images/alliance.png" alt="Alliance" style="display: block; margin: 0 auto;">
-          </div>
-          <div style="width: fit-content;">
-            Night Elf<br>
-            <img src="./images/races/night_elf.png" alt="Druid" style="display: block; margin: 0 auto;">
-          </div>
-          <div style="width: fit-content;">
-            Druid<br>
-            <img src="./images/classes/druid/druid.png" alt="Druid" style="display: block; margin: 0 auto;">
-          </div>
-          <div style="width: fit-content;">
-            Feral<br>
-            <img src="./images/classes/druid/feral.png" alt="Feral" style="display: block; margin: 0 auto;">
-          </div>
-          <div style="width: fit-content;">
-            Alchemy<br>
-            <img src="./images/profs/alchemy.png" alt="Alchemy" style="display: block; margin: 0 auto;">
-          </div>
-        </div>
-      </div> -->
-    </article>
 
-    <script>
-      class Character {
-        constructor(cls, spec, race = null, prof = null, name = null, faction = null) {
-          this.cls = cls;
-          this.spec = spec;
-          this.race = race;
-          this.prof = prof;
-          this.name = name;
-          this.faction = faction;
-        }
-
-        clone() {
-          return new Character(this.cls, this.spec, this.race, this.prof);
-        }
-      }
-
-      var TANKS = [
-        new Character("warrior", "protection"),
-        new Character("paladin", "protection"),
-        new Character("druid", "guardian"),
-      ]
-      var HEALERS = [
-        new Character("paladin", "holy"),
-        new Character("druid", "restoration"),
-        new Character("priest", "holy"),
-        new Character("shaman", "restoration"),
-      ]
-      var DAMAGE_DEALERS = [
-        new Character("warrior", "arms"),
-        new Character("warrior", "fury"),
-        new Character("paladin", "retribution"),
-        new Character("druid", "feral"),
-        new Character("druid", "balance"),
-        new Character("hunter", "beast_mastery"),
-        new Character("hunter", "marksmanship"),
-        new Character("hunter", "survival"),
-        new Character("mage", "arcane"),
-        new Character("mage", "fire"),
-        new Character("mage", "frost"),
-        new Character("rogue", "assassination"),
-        new Character("rogue", "combat"),
-        new Character("rogue", "subtlety"),
-        new Character("priest", "shadow"),
-        new Character("priest", "discipline"),
-        new Character("shaman", "elemental"),
-        new Character("shaman", "enhancement"),
-        new Character("warlock", "affliction"),
-        new Character("warlock", "demonology"),
-        new Character("warlock", "destruction"),
-      ]
-      var RACE_CLASSES = {
-        "human": ["warrior", "paladin", "rogue", "priest", "mage", "warlock"],
-        "dwarf": ["warrior", "paladin", "hunter", "rogue", "priest"],
-        "night_elf": ["warrior", "hunter", "rogue", "priest", "druid"],
-        "gnome": ["warrior", "rogue", "mage", "warlock"],
-        "orc": ["warrior", "hunter", "rogue", "shaman", "warlock"],
-        "undead": ["warrior", "rogue", "priest", "mage", "warlock"],
-        "tauren": ["warrior", "hunter", "shaman", "druid"],
-        "troll": ["warrior", "hunter", "rogue", "priest", "shaman", "mage"],
-      }
-      var FACTION_RACES = {
-        "alliance": ["human", "dwarf", "night_elf", "gnome"],
-        "horde": ["orc", "undead", "tauren", "troll"],
-      }
-      var PROFESSIONS = [
-        "alchemy",
-        "blacksmithing",
-        "enchanting",
-        "engineering",
-        "leatherworking",
-        "tailoring",
-      ]
-
-      function get_classes_for_races(races) {
-        var classes = new Set();
-
-        races.forEach(r => {
-          classes = classes.union(new Set(RACE_CLASSES[r]))
-        });
-
-        return Array.from(classes);
-      }
-
-      function random_choice_char(chars_all, k = 1, replace_classes = false, replace_specs = false) {
-        var chars_all = Array.from(chars_all);
-        var choices = [];
-
-        if(k == 0)
-          return choices;
-
-        for(var i = 0; i < k; i++) {
-          assert(chars_all.length > 0, "Not enough characters to choose from");
-
-          var j = Math.floor(Math.random() * chars_all.length);
-          var choice = chars_all[j].clone();
-          choices.push(choice);
-
-          if(!replace_classes) {
-            chars_all = chars_all.filter(char => char.cls != choice.cls);
-          }
-          else if(!replace_specs) {
-            chars_all.splice(j, 1);
-          }
-        }
-
-        return choices;
-      }
-
-      function random_choice(array, k = 1, replace = false) {
-        var array = Array.from(array);
-        var choices = [];
-
-        assert(replace || k <= array.length, "Cannot choose more elements than there are in the array");
-
-        if(k == 0)
-          return choices;
-
-        for(var i = 0; i < k; i++) {
-          var j = Math.floor(Math.random() * array.length);
-          console.log(j, array);
-          choices.push(array[j]);
-
-          if(!replace)
-            array.splice(j, 1);
-        }
-        console.log(choices);
-        console.log();
-
-        return choices;
-      }
-
-      function assert(condition, message) {
-        if(!condition) {
-          throw message;
-        }
-      }
-
-      function format_string(str) {
-        return str.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-      }
-
-      function create_character_card(char) {
-        return `
-        <div>
-          <h6>${char.name}</h6>
-          <div class="grid">
-            <div style="width: fit-content;">
-              ${format_string(char.faction)}<br>
-              <img src="./images/${char.faction}.png" alt="${char.faction}" style="display: block; margin: 0 auto;">
-            </div>
-            <div style="width: fit-content;">
-              ${format_string(char.race)}<br>
-              <img src="./images/races/${char.race}.png" alt="${char.race}" style="display: block; margin: 0 auto;">
-            </div>
-            <div style="width: fit-content;">
-              ${format_string(char.cls)}<br>
-              <img src="./images/classes/${char.cls}/${char.cls}.png" alt="${char.cls}" style="display: block; margin: 0 auto;">
-            </div>
-            <div style="width: fit-content;">
-              ${format_string(char.spec)}<br>
-              <img src="./images/classes/${char.cls}/${char.spec}.png" alt="${char.spec}" style="display: block; margin: 0 auto;">
-            </div>
-            <div style="width: fit-content;">
-              ${format_string(char.prof)}<br>
-              <img src="./images/profs/${char.prof}.png" alt="${char.prof}" style="display: block; margin: 0 auto;">
-            </div>
-          </div>
-        </div style="margin-bottom: 10px;">
-        `;
-      }
-
-      function shuffle(array) {
-        array = Array.from(array);
-        arr_new = [];
-
-        while(array.length > 0) {
-          j = Math.floor(Math.random() * array.length);
-          arr_new.push(array[j]);
-          array.splice(j, 1);
-        }
-
-        return arr_new;
-      }
+      <table>
+        <thead>
+          <tr>
+            <th colspan="5">Character 1</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <span>Alliance</span>
+              <img src="./images/alliance.png" alt="Alliance">
+            </td>
+            <td>
+              <span>Night Elf</span>
+              <img src="./images/races/night_elf.png" alt="Druid">
+            </td>
+            <td>
+              <span>Druid</span>
+              <img src="./images/classes/druid/druid.png" alt="Druid">
+            </td>
+            <td>
+              <span>Feral</span>
+              <img src="./images/classes/druid/feral.png" alt="Feral">
+            </td>
+            <td>
+              <span>Alchemy</span>
+              <img src="./images/profs/alchemy.png" alt="Alchemy">
+            </td>
+          </tr>
+        </tbody>
+      </table>
       
-      function randomize() {
-        var faction = document.getElementById("faction").value.toLowerCase();
-        var party_size = parseInt(document.getElementById("party_size").value);
-        var num_healers = document.getElementById("num_healers").value;
-        var num_tanks = document.getElementById("num_tanks").value;
-        var replace_specs = document.getElementById("allow_duplicate_specs").checked;
-        var replace_classes = document.getElementById("allow_duplicate_classes").checked;
-        var replace_professions = document.getElementById("allow_duplicate_professions").checked;
-
-        if(faction == "random") {
-          // randomly choose faction
-          faction = Math.random() < 0.5 ? "alliance" : "horde";
-        }
-
-        if(num_healers == "Random") {
-          // randomly choose number of healers
-          n = party_size - (num_tanks == "Random" ? 0 : num_tanks);
-          k = (replace_specs & replace_classes) ? n : Math.min(3, n)
-          num_healers = Math.floor(Math.random() * k);
-        }
-        else {
-          num_healers = parseInt(num_healers);
-        }
-
-        if(num_tanks == "Random") {
-          // randomly choose number of tanks
-          n = party_size - num_healers
-          k = (replace_specs & replace_classes) ? n : Math.min(3, n)
-          num_tanks = Math.floor(Math.random() * k);
-        }
-        else {
-          num_tanks = parseInt(num_tanks);
-        }
-
-        assert(num_tanks + num_healers <= party_size, "Not enough party members for the number of tanks and healers");
-
-        // get valid races, classes, etc. for the chosen faction
-        var races = FACTION_RACES[faction];
-        var classes = get_classes_for_races(races);
-        var tanks = TANKS.filter(c => classes.includes(c.cls));
-        var healers = HEALERS.filter(c => classes.includes(c.cls));
-        var damage_dealers = DAMAGE_DEALERS.filter(c => classes.includes(c.cls));
-
-        // randomly choose tank classes / specs
-        tanks = random_choice_char(tanks, num_tanks, replace_classes, replace_specs);
-        if(!replace_classes) {
-          // remove classes already picked for tanks
-          tanks.forEach(char => { healers = healers.filter(c => c.cls != char.cls); });
-        }
-        console.log(healers);
+      <!-- <table>
+        <tr>
+          <th colspan="5">Character 1</th>
+        </tr>
+        <tr>
+          <td>
+            <span>Alliance</span>
+            <img src="./images/alliance.png" alt="Alliance">
+          </td>
+          <td>
+            <span>Night Elf</span>
+            <img src="./images/races/night_elf.png" alt="Druid">
+          </td>
+          <td>
+            <span>Druid</span>
+            <img src="./images/classes/druid/druid.png" alt="Druid">
+          </td>
+          <td>
+            <span>Feral</span>
+            <img src="./images/classes/druid/feral.png" alt="Feral">
+          </td>
+          <td>
+            <span>Alchemy</span>
+            <img src="./images/profs/alchemy.png" alt="Alchemy">
+          </td>
+        </tr>
         
-        // randomly choose healer classes / specs
-        healers = random_choice_char(healers, num_healers, replace_classes, replace_specs);
-        if(!replace_classes) {
-          // remove classes already picked for tanks / healers
-          tanks.forEach(char => { damage_dealers = damage_dealers.filter(c => c.cls != char.cls); });
-          healers.forEach(char => { damage_dealers = damage_dealers.filter(c => c.cls != char.cls); });
-        }
-        
-        // randomly choose damage dealer classes / specs
-        console.log(damage_dealers);
-        damage_dealers = random_choice_char(damage_dealers, party_size - num_tanks - num_healers, replace_classes, replace_specs);
+        <tr class="spacer"></tr>
 
-        chars = tanks.concat(healers).concat(damage_dealers);
-        chars = shuffle(chars);
-        
-        // randomly choose race and profession for each character
-        profs = random_choice(PROFESSIONS, party_size, replace_professions);
-        for(var i = 0; i < party_size; i++) {
-          chars[i].faction = faction;
-          chars[i].name = "Character " + (i + 1);
-          chars[i].prof = profs[i];
-          
-          races_cls = races.filter(r => RACE_CLASSES[r].includes(chars[i].cls));
-          j = Math.floor(Math.random() * races_cls.length);
-          chars[i].race = races_cls[j];
-        }
+        <tr>
+          <th colspan="5">Character 2</th>
+        </tr>
+        <tr>
+          <td>
+            <span>Alliance</span>
+            <img src="./images/alliance.png" alt="Alliance">
+          </td>
+          <td>
+            <span>Night Elf</span>
+            <img src="./images/races/night_elf.png" alt="Druid">
+          </td>
+          <td>
+            <span>Druid</span>
+            <img src="./images/classes/druid/druid.png" alt="Druid">
+          </td>
+          <td>
+            <span>Feral</span>
+            <img src="./images/classes/druid/feral.png" alt="Feral">
+          </td>
+          <td>
+            <span>Alchemy</span>
+            <img src="./images/profs/alchemy.png" alt="Alchemy">
+          </td>
+        </tr>
+      </table> -->
 
-        // create output in html format
-        html = "";
-        chars.forEach(char => {
-          html += create_character_card(char);
-        });
-        document.getElementById("generated_characters").innerHTML = html;
-      }
-    </script>
+    </article>
   </main>
+
+  <script>
+    var FACTION_RACES = {
+      "alliance": ["human", "dwarf", "night_elf", "gnome"],
+      "horde": ["orc", "undead", "tauren", "troll"],
+    }
+    var CLASSES = [
+      "warrior", "paladin", "hunter", "rogue", "priest", "shaman", "druid", "mage", "warlock"
+    ]
+    var PROFESSIONS = [
+      "alchemy", "blacksmithing", "enchanting", "engineering", "leatherworking", "tailoring"
+    ]
+    var ROLE_TANK = "tank";
+    var ROLE_HEAL = "heal";
+    var ROLE_DMG = "damage";
+  
+    class Character {
+      constructor(weight, cls, spec, role, race = null, prof = null, name = null, faction = null) {
+        this.weight = weight;
+        this.cls = cls;
+        this.spec = spec;
+        this.role = role;
+        this.race = race;
+        this.prof = prof;
+        this.name = name;
+        this.faction = faction;
+      }
+
+      clone() {
+        return new Character(this.weight, this.cls, this.spec, this.role, this.race, this.prof, this.name, this.faction);
+      }
+    }
+
+    function count_classes(chars) {
+      var counts = {};
+      CLASSES.forEach(cls => counts[cls] = 0);
+      chars.forEach(char => counts[char.cls]++);
+      return counts;
+    }
+
+    function count_roles(chars) {
+      var counts = { ROLE_TANK: 0, ROLE_HEAL: 0, ROLE_DMG: 0 };
+      chars.forEach(char => counts[char.role]++);
+      return counts;
+    }
+
+    function random_sample_spec(chars_all, n, avoid_dup_class, avoid_dup_class_across_role, avoid_dup_specs, chars_chosen) {      
+      var chars = [];
+      var choices = [];
+      var classes = unique(chars_all.map(char => char.cls));
+
+      for(var i = 0; i < n; i++) {
+        
+        if(chars.length == 0) {
+          if(avoid_dup_class_across_role) {
+            n_class_chosen = count_classes(chars_chosen);
+            n_class_choices = count_classes(choices);
+            
+            n_class = {};
+            n_class_min = Number.MAX_SAFE_INTEGER;
+            for(var k in n_class_chosen) {
+              if(!classes.includes(k))
+                continue;
+              n_class[k] = n_class_chosen[k] + n_class_choices[k];
+              n_class_min = Math.min(n_class_min, n_class[k]);
+            }
+
+            chars = chars_all.filter(char => n_class[char.cls] == n_class_min);
+          }
+          else {
+            chars = Array.from(chars_all);
+          }
+          assert(chars.length > 0, "assert");
+        }
+
+        var weights = chars.map(char => char.weight);
+        var k = inverse_transform_sampling(weights);
+        var choice = chars[k].clone();
+        choices.push(choice);
+
+        if(avoid_dup_class)
+          chars = chars.filter(char => char.cls != choice.cls);
+        else if(avoid_dup_specs)
+          chars.splice(k, 1);
+      }
+
+      return choices;
+    }
+
+    function get_characters_from_table(table_id, role) {
+      table = document.getElementById(table_id);
+      var chars = [];
+
+      for(var i = 0; i < table.rows[0].cells.length; ++i) {
+        var cls = table.rows[0].cells[i].innerHTML.toLowerCase();
+
+        for(var j = 1; j < table.rows.length; ++j) {
+          var cell = table.rows[j].cells[i];
+
+          var content = cell.innerHTML;
+          if(content == "")
+            continue;
+          spec = content.split('>')[1].toLowerCase().replace(" ", "_").replace("/", "_");
+
+          if(!cell.querySelector("input").checked)
+            continue;
+
+          chars.push(new Character(1, cls, spec, role));
+        }
+      }
+
+      return chars;
+    }
+
+    function get_combinations_from_table(table_id) {
+      table = document.getElementById(table_id);
+      var combos = {};
+
+      for(var i = 1; i < table.rows[0].cells.length; ++i) {
+        var cls = table.rows[0].cells[i].innerHTML.toLowerCase();
+        combos[cls] = [];
+
+        for(var j = 1; j < table.rows.length; ++j) {
+          var cb = table.rows[j].cells[i].querySelector("input");
+          if(cb == null || !cb.checked)
+            continue;
+        
+          var race = table.rows[j].cells[0].innerHTML.toLowerCase().replace(" ", "_");
+          combos[cls].push(race);
+        }
+      }
+
+      return combos;
+    }
+
+    function distribute_weights_per_class(chars) {
+      var weights = {};
+      
+      for(var char of chars) {
+        if(!(char.cls in weights))
+          weights[char.cls] = 0;
+        weights[char.cls] += char.weight;
+      }
+
+      for(var char of chars) {
+        char.weight /= weights[char.cls];
+      }
+    }
+
+    function cumsum(array) {
+      return array.map((s => value => s += value)(0));
+    }
+
+    function inverse_transform_sampling(weights) {
+      var c = cumsum(weights);
+      var r = Math.random() * c[c.length - 1];
+      return c.findIndex(s => s > r);
+    }
+
+    function random_spec(chars, cls) {
+      chars = chars.filter(char => char.cls == cls);
+      k = Math.floor(Math.random() * chars.length)
+      return chars[k];
+    }
+
+    function random_choice(array, k, replace = false) {
+      var array = Array.from(array);
+      var choices = [];
+
+      assert(replace || k <= array.length, "Cannot choose more elements than there are in the array");
+
+      if(k == 0 || array.length == 0)
+        return choices;
+
+      for(var i = 0; i < k; i++) {
+        var j = Math.floor(Math.random() * array.length);
+        console.log(j, array);
+        choices.push(array[j]);
+
+        if(!replace)
+          array.splice(j, 1);
+      }
+
+      return choices;
+    }
+
+    function assert(condition, message) {
+      if(!condition) {
+        throw message;
+      }
+    }
+
+    function format_string(str) {
+      if(str == "fury_prot")
+        return "Fury/Prot";
+      return str.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    }
+
+    function create_character_card(char) {
+      return `
+      <tr>
+        <th colspan="5">${char.name}</th>
+      </tr>
+      <tr>
+        <td>
+          <span>${format_string(char.faction)}</span>
+          <img src="./images/${char.faction}.png" alt="${format_string(char.faction)}">
+        </td>
+        <td>
+          <span>${format_string(char.race)}</span>
+          <img src="./images/races/${char.race}.png" alt="${format_string(char.race)}">
+        </td>
+        <td>
+          <span>${format_string(char.cls)}</span>
+          <img src="./images/classes/${char.cls}/${char.cls}.png" alt="${format_string(char.cls)}">
+        </td>
+        <td>
+          <span>${format_string(char.spec)}</span>
+          <img src="./images/classes/${char.cls}/${char.spec}.png" alt="${format_string(char.spec)}">
+        </td>
+        <td>
+          <span>${format_string(char.prof)}</span>
+          <img src="./images/profs/${char.prof}.png" alt="${format_string(char.prof)}">
+        </td>
+      </tr>
+      `;
+    }
+
+    function display_results(chars) {
+      html = "<table>";
+      
+      for(var i = 0; i < chars.length; ++i) {
+        if(i > 0)
+          html += "<tr class='spacer'></tr>";
+        html += create_character_card(chars[i]);
+      }
+
+      html += "</table>";
+
+      document.getElementById("results").innerHTML = html;
+    }
+
+    function shuffle(array) {
+      array = Array.from(array);
+      arr_new = [];
+
+      while(array.length > 0) {
+        j = Math.floor(Math.random() * array.length);
+        arr_new.push(array[j]);
+        array.splice(j, 1);
+      }
+
+      return arr_new;
+    }
+
+    function unique(array) {
+      return Array.from(new Set(array));
+    }
+
+    function dict_values(dict) {
+      return Object.keys(dict).map(key => dict[key]);
+    }
+
+    function dict_keys(dict) {
+      return Object.keys(dict);
+    }
+    
+    function add_char_name(element) {
+      if(event.key == "Enter") {
+        var name = element.value.trim();
+        if(name == "")
+          return;
+
+        var table = document.getElementById("character_names");
+        var row = table.insertRow(-1);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        cell1.innerHTML = name;
+        cell2.classList.add("trash");
+        cell2.innerHTML = "<button class='outline trash' onclick='remove_char_name(this)'>";
+        element.value = "";
+
+        update_party_size();
+      }
+    }
+    
+    function remove_char_name(element) {
+      var row = element.parentElement.parentElement;
+      row.remove();
+
+      update_party_size();
+    }
+    
+    function update_party_size() {
+      var party_size = document.getElementById("character_names").rows.length;
+      document.getElementById("party_size").value = party_size;
+
+      check_party_size();
+    }
+
+    function check_party_size() {
+      e_party = document.getElementById("party_size");
+      e_tank = document.getElementById("num_tank_min");
+      e_heal = document.getElementById("num_heal_min");
+      
+      var party_size = parseInt(e_party.value);
+      var num_tank_min = parseInt(e_tank.value);
+      var num_heal_min = parseInt(e_heal.value);
+
+      if(num_tank_min + num_heal_min <= party_size)
+      {
+        e_party.removeAttribute("aria-invalid");
+        e_tank.removeAttribute("aria-invalid");
+        e_heal.removeAttribute("aria-invalid");
+        return;
+      }
+
+      e_party.setAttribute("aria-invalid", "true");
+      if(num_heal_min > 0)
+        e_heal.setAttribute("aria-invalid", "true");
+      if(num_tank_min > 0)
+        e_tank.setAttribute("aria-invalid", "true");
+    }
+
+    function on_faction_changed() {
+      document.getElementById("race").value = "random";
+    }
+
+    function on_race_changed() {
+      var race = document.getElementById("race").value;
+      document.getElementById("race_message").style.visibility = (race == "gnome" ? "visible" : "hidden");
+      if(race != "random")
+        document.getElementById("faction").value = (FACTION_RACES["alliance"].includes(race) ? "alliance" : "horde");
+    }
+
+    function on_min_heal_changed() {
+      var num_heal_min = parseInt(document.getElementById("num_heal_min").value);
+      var num_heal_max = parseInt(document.getElementById("num_heal_max").value);
+      if(num_heal_min > num_heal_max)
+        document.getElementById("num_heal_max").value = num_heal_min;
+
+      check_party_size();
+    }
+
+    function on_max_heal_changed() {
+      var num_heal_min = parseInt(document.getElementById("num_heal_min").value);
+      var num_heal_max = parseInt(document.getElementById("num_heal_max").value);
+      if(num_heal_max < num_heal_min)
+        document.getElementById("num_heal_min").value = num_heal_max;
+
+      check_party_size();
+    }
+
+    function on_min_tank_changed() {
+      var num_tank_min = parseInt(document.getElementById("num_tank_min").value);
+      var num_tank_max = parseInt(document.getElementById("num_tank_max").value);
+      if(num_tank_min > num_tank_max)
+        document.getElementById("num_tank_max").value = num_tank_min;
+
+      check_party_size();
+    }
+
+    function on_max_tank_changed() {
+      var num_tank_min = parseInt(document.getElementById("num_tank_min").value);
+      var num_tank_max = parseInt(document.getElementById("num_tank_max").value);
+      if(num_tank_max < num_tank_min)
+        document.getElementById("num_tank_min").value = num_tank_max;
+
+      check_party_size();
+    }
+
+    function on_duplicate_classes_changed() {
+      var e_dc = document.getElementById("avoid_duplicate_classes")
+      var e_dcar = document.getElementById("avoid_duplicate_classes_across_roles")
+
+      var avoid_duplicate_classes = e_dc.checked;
+      var avoid_duplicate_classes_across_roles = e_dcar.checked;
+
+      if(!avoid_duplicate_classes && avoid_duplicate_classes_across_roles)
+        e_dcar.checked = false;
+    }
+
+    function on_duplicate_classes_across_roles_changed() {
+      var e_dc = document.getElementById("avoid_duplicate_classes")
+      var e_dcar = document.getElementById("avoid_duplicate_classes_across_roles")
+
+      var avoid_duplicate_classes = e_dc.checked;
+      var avoid_duplicate_classes_across_roles = e_dcar.checked;
+
+      if(!avoid_duplicate_classes && avoid_duplicate_classes_across_roles)
+        e_dc.checked = true;
+    }
+
+    function get_character_names() {
+      var table = document.getElementById("character_names");
+      var names = [];
+      for(var i = 0; i < table.rows.length; i++) {
+        names.push(table.rows[i].cells[0].innerHTML);
+      }
+      return names;
+    }
+    
+    function randomize() {
+      var faction = document.getElementById("faction").value;
+      var race = document.getElementById("race").value;
+      var party_size = parseInt(document.getElementById("party_size").value);
+      var n_min_tank = document.getElementById("num_tank_min").value;
+      var n_max_tank = document.getElementById("num_tank_max").value;
+      var n_min_heal = document.getElementById("num_heal_min").value;
+      var n_max_heal = document.getElementById("num_heal_max").value;
+      var n_min_dmg = party_size - n_max_tank - n_max_heal;
+      var n_max_dmg = party_size - n_min_tank - n_min_heal;
+
+      var avoid_dup_specs = document.getElementById("avoid_duplicate_specs").checked;
+      var avoid_dup_class = document.getElementById("avoid_duplicate_classes").checked;
+      var avoid_dup_class_across_role = document.getElementById("avoid_duplicate_classes_across_roles").checked;
+      var avoid_dup_prof = document.getElementById("avoid_duplicate_professions").checked;
+      var use_prof_class_combo = document.getElementById("use_prof_class_combo").checked;
+      var use_single_race = document.getElementById("use_single_race").checked;
+      var use_per_class_probabilities = document.getElementById("use_per_class_probabilities").checked;
+      
+      var tanks_all = get_characters_from_table("tank_specs", ROLE_TANK);
+      var heals_all = get_characters_from_table("heal_specs", ROLE_HEAL);
+      var dmgs_all = get_characters_from_table("damage_specs", ROLE_DMG);
+      var race_combos = get_combinations_from_table("class_race_combos");
+      var prof_combos = get_combinations_from_table("class_prof_combos");
+
+      var char_names = get_character_names();
+
+      // console.log("--------------------------------------------------------------------------------");
+      // console.log("Settings:");
+      // console.log("faction", faction);
+      // console.log("race", race);
+      // console.log("party_size", party_size);
+      // console.log("n_min_tank", n_min_tank);
+      // console.log("n_max_tank", n_max_tank);
+      // console.log("n_min_heal", n_min_heal);
+      // console.log("n_max_heal", n_max_heal);
+      // console.log("n_min_dmg", n_min_dmg);
+      // console.log("n_max_dmg", n_max_dmg);
+      // console.log("avoid_dup_specs", avoid_dup_specs);
+      // console.log("avoid_dup_class", avoid_dup_class);
+      // console.log("avoid_dup_class_across_role", avoid_dup_class_across_role);
+      // console.log("avoid_dup_prof", avoid_dup_prof);
+      // console.log("use_prof_class_combo", use_prof_class_combo);
+      // console.log("use_single_race", use_single_race);
+      // console.log("use_per_class_probabilities", use_per_class_probabilities);
+      // console.log("tanks_all", tanks_all);
+      // console.log("heals_all", heals_all);
+      // console.log("dmgs_all", dmgs_all);
+      // console.log("race_combos", race_combos);
+      // console.log("prof_combos", prof_combos);
+      // console.log("char_names", char_names);
+      // console.log();
+      
+      // get faction
+      if(faction == "random") {
+        // randomly choose faction
+        faction = Math.random() < 0.5 ? "alliance" : "horde";
+      }
+      races = FACTION_RACES[faction];
+      // console.log("faction", faction);
+      
+      // get race
+      if(race == "random") {
+        if(use_single_race)
+          races = random_choice(races, 1);
+      }
+      else {
+        assert(races.includes(race), "error");
+        races = [race];
+      }
+      // filter race_combos to only include races from races
+      for(var cls in race_combos) {
+        race_combos[cls] = race_combos[cls].filter(r => races.includes(r)).filter(classes => classes.length > 0);
+        if(race_combos[cls].length == 0)
+          delete race_combos[cls];
+      }
+      // console.log("races", races);
+
+      // filter classes to only include classes from race_combos
+      classes = dict_keys(race_combos);
+      tanks_all = tanks_all.filter(char => classes.includes(char.cls));
+      dmgs_all = dmgs_all.filter(char => classes.includes(char.cls));
+      
+      // use dwarves as healers if race is gnome
+      if(races.length == 1 && races[0] == "gnome") {
+        race_combos["priest"] = ["dwarf"];
+        race_combos["paladin"] = ["dwarf"];
+      }
+      classes = dict_keys(race_combos);
+      heals_all = heals_all.filter(char => classes.includes(char.cls));
+
+      assert(tanks_all.length > 0, "error: tanks_all.length == 0");
+      assert(heals_all.length > 0, "error: heals_all.length == 0");
+      assert(dmgs_all.length > 0, "error: dmgs_all.length == 0");
+
+      // distribute weights per class
+      if(use_per_class_probabilities) {
+        distribute_weights_per_class(tanks_all);
+        distribute_weights_per_class(heals_all);
+        distribute_weights_per_class(dmgs_all);
+      }
+
+      // randomly sample class / spec
+      chars = [];
+      
+      if(n_min_tank > 0)
+        chars = chars.concat(random_sample_spec(tanks_all, n_min_tank, avoid_dup_class, avoid_dup_class_across_role, avoid_dup_specs, chars));
+      
+      if(n_min_heal > 0)
+        chars = chars.concat(random_sample_spec(heals_all, n_min_heal, avoid_dup_class, avoid_dup_class_across_role, avoid_dup_specs, chars));
+
+      if(n_min_dmg > 0)
+        chars = chars.concat(random_sample_spec(dmgs_all, n_min_dmg, avoid_dup_class, avoid_dup_class_across_role, avoid_dup_specs, chars));
+
+      while(chars.length < party_size) {
+        chars_all = []
+        cnt_roles = count_roles(chars);
+        
+        if(cnt_roles[ROLE_TANK] < n_max_tank)
+          chars_all = chars_all.concat(tanks_all);
+        if(cnt_roles[ROLE_HEAL] < n_max_heal)
+          chars_all = chars_all.concat(heals_all);
+        if(cnt_roles[ROLE_DMG] < n_max_dmg)
+          chars_all = chars_all.concat(dmgs_all);
+        
+        assert(chars_all.length > 0, "assert");
+        distribute_weights_per_class(chars_all);
+
+        chars = chars.concat(random_sample_spec(chars_all, 1, avoid_dup_class, avoid_dup_class, avoid_dup_specs, chars));
+      }
+
+      // randomly sample race
+      chars.forEach(char => char.race = random_choice(race_combos[char.cls], 1)[0]);
+
+      // randomly sample profession
+      if(!use_prof_class_combo)
+        CLASSES.forEach(cls => prof_combos[cls] = Array.from(PROFESSIONS));
+
+      var profs = {};
+      for(var k in prof_combos)
+        profs[k] = Array.from(prof_combos[k]);
+      
+      chars.forEach(char => {
+        if(profs.length == 0) {
+          profs = {};
+          for(var k in prof_combos)
+            profs[k] = Array.from(prof_combos[k]);
+        }
+
+        var prof = [];
+        if(profs[char.cls].length > 0)
+          prof = random_choice(profs[char.cls], 1);
+        if(prof.length == 0)
+          prof = random_choice(prof_combos[char.cls], 1);
+        prof = prof[0];
+
+        if(avoid_dup_prof) {
+         for(var k in profs)
+           profs[k] = profs[k].filter(p => p != prof);
+        }
+
+        char.prof = prof;
+      });
+
+      // shuffle chars
+      chars = shuffle(chars);
+
+      // assign names
+      char_names.forEach((name, i) => chars[i].name = name);
+      
+      // assign faction
+      chars.forEach(char => char.faction = faction);
+
+      display_results(chars);
+    }
+  </script>
 </body>
 
 </html>
