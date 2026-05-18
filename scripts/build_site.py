@@ -266,11 +266,11 @@ main.container {
 }
 
 .compact-day-bar__inner {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.8rem 1rem;
+  gap: 0.45rem 0.9rem;
+  padding: 0.55rem 0.8rem;
   border: 1px solid var(--line-soft);
   border-radius: 1rem;
   background: var(--surface-1);
@@ -304,7 +304,14 @@ main.container {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
-  gap: 0.45rem;
+  align-content: center;
+  gap: 0.32rem;
+  max-width: 100%;
+}
+
+.compact-day-bar .badge {
+  padding: 0.16rem 0.52rem;
+  font-size: 0.7rem;
 }
 
 .overview-actions,
@@ -663,7 +670,7 @@ html[data-theme="dark"] code {
 
   .compact-day-bar__inner {
     align-items: flex-start;
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 
   .compact-day-bar__meta {
@@ -1469,8 +1476,11 @@ def build_day_pages(day_plans: list[DayPlan]) -> None:
         compact_bar_meta = "".join(
             [
                 badge_html(day.tag, f"badge-{day.tag_slug}"),
+                badge_html(day.day_type_label, "badge-type"),
                 badge_html(day.weather_label, f"badge-weather-{day.weather}"),
                 badge_html(day.energy_label, f"badge-energy-{day.energy}"),
+                badge_html(day.reservation_label, f"badge-reservation-{day.reservation}"),
+                status_badges,
             ]
         )
 
