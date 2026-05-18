@@ -1,0 +1,105 @@
+Travel Planning Task: Tokyo Trip
+
+Goal
+- Create a detailed travel plan for a Tokyo trip for 2 people.
+- Trip length: 2 to 3 weeks.
+- Timeframe: December, possibly including Christmas.
+- Exact travel dates are not known yet.
+
+High-Level Scope
+- Focus mostly on Tokyo.
+- Also include single-day excursions to other areas.
+- Also research whether a 1-night trip to a nearby hot spring town is a good option.
+- Do not research Tokyo hotel options; accommodation in Tokyo will likely be an Airbnb.
+
+Traveler Preferences
+- Do not focus on stereotypical tourist attractions such as Tokyo Tower.
+- Preferred travel style / interests:
+  - food
+  - nightlife (but not discos / clubbing)
+  - neighborhoods
+  - wandering / walking around
+  - nature
+  - anime
+  - architecture
+  - games
+  - culture
+- Create a mix of:
+  - relaxing / lighter days
+  - packed / busy days
+  - indoor days for very cold / snowy / rainy weather
+  - outdoor snowy-day plans where snow would be especially beautiful
+
+Research Requirements
+- Look for ideas online using multiple source types, including:
+  - reviews
+  - “top XXX” lists
+  - recommendation articles / guides
+  - other useful recommendation sources
+- For each activity in each day plan, do extensive research.
+- Include direct links wherever relevant, for example:
+  - official websites
+  - booking pages
+  - attraction information pages
+  - hike route pages
+  - restaurant pages
+  - maps
+- For attractions, restaurants, and other planned stops, research opening times and account for them in the plans.
+- Research important practical information and include it in the documentation, for example:
+  - SIM card / eSIM options
+  - train tickets / rail passes / transport cards
+  - whether cash is needed vs. card acceptance
+  - where to get cash if needed
+- Investigate whether it is actually true that shops are closed for 2 days over Christmas.
+- Do not assume this; verify it.
+- If Christmas closures limit options, research alternatives such as hikes or other suitable activities.
+- Research whether some kind of 2-week / 3-week / 1-month public transport pass would make sense, considering public transport costs.
+- Research any “special” restaurants that are especially worth checking out.
+
+Hot Spring Town Research
+- Check whether a 1-night trip to a hot spring town that is not too far from Tokyo is feasible and worthwhile.
+- Provide several options.
+- Include:
+  - hotel / ryokan prices
+  - reviews
+  - traditional Japanese inns
+  - options that may include a private / personal onsen
+
+Day Plan Requirements
+- Create about 30 to 40 day plans total so there are plenty of options to choose from.
+- Dates do not need to be fixed.
+- If a specific event only happens on certain dates or days, it may be tied to those dates.
+- Create special day plans for special dates / occasions such as:
+  - Christmas Eve
+  - New Year’s
+  - other notable holiday-period days if relevant
+- Avoid repeating very similar neighborhoods or experiences too often across the set of day plans.
+- Each recommendation should be tagged as one of:
+  - strong fit
+  - experimental
+  - weather-dependent
+
+Deliverables
+- Put everything in one folder.
+- Create one markdown file per day plan.
+- Also create one general markdown file that gives an overview of all day plans.
+- If there are small miscellaneous recommendations that could fit into almost any day plan, include them in the general markdown file.
+
+Required Content in Each Day Plan File
+- Short summary at the top.
+- Estimated cost.
+- Estimated transit time.
+- Map links.
+- Well-researched activities with relevant links.
+- Opening-time considerations where relevant.
+
+Required Content in the General Overview File
+- Overview of all day plans.
+- Top 10 must-do day plans, prioritized / ranked.
+- Miscellaneous recommendations that fit flexibly into multiple plans.
+- Important practical trip information gathered during research.
+
+Quality / Process Rules
+- Do not make uncertain assumptions.
+- If something important is unclear or uncertain, ask me in between.
+- After finishing, review everything again and check whether there are any additional relevant considerations for each point / recommendation.

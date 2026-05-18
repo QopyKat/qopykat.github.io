@@ -1,0 +1,172 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>11. Roppongi Art Late Day</title>
+    <script>
+      (function () {
+        var theme = "dark";
+        try {
+          var urlTheme = new URLSearchParams(window.location.search).get("theme");
+          if (urlTheme === "dark" || urlTheme === "light") {
+            theme = urlTheme;
+          } else {
+            theme = localStorage.getItem("tokyo-trip-theme") || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+          }
+        } catch (error) {}
+        document.documentElement.dataset.theme = theme || "dark";
+        document.documentElement.style.colorScheme = document.documentElement.dataset.theme;
+      })();
+    </script>
+    <link rel="stylesheet" href="../vendor/pico.min.css">
+    <link rel="stylesheet" href="../styles.css">
+  </head>
+  <body>
+    <main class="container">
+      <header class="site-toolbar">
+        <a href="../../index.html" class="toolbar-brand">
+          <span>Tokyo Trip Plans</span>
+          <small>Local travel site</small>
+        </a>
+        <div class="toolbar-controls">
+          
+          <div class="theme-switch">
+            <label for="theme-switch">Theme</label>
+            <input id="theme-switch" type="checkbox" role="switch" data-theme-switch aria-label="Toggle dark mode">
+            <span data-theme-label>Dark mode</span>
+          </div>
+        </div>
+      </header>
+      
+        <div class="page-shell" data-day-page>
+          <div class="compact-day-bar" data-compact-day-bar aria-hidden="true">
+            <div class="compact-day-bar__inner">
+              <div class="compact-day-bar__title-group">
+                <span class="compact-day-bar__kicker">11 / Tokyo city day</span>
+                <span class="compact-day-bar__title">Roppongi Art Late Day</span>
+              </div>
+              <div class="compact-day-bar__meta">
+                <span class="badge badge-strong-fit">strong fit</span><span class="badge badge-weather-rain-friendly">Rain-friendly</span><span class="badge badge-energy-packed">Packed day</span>
+              </div>
+            </div>
+          </div>
+          <section class="page-hero" data-page-hero>
+            <span class="hero-kicker">11 / Tokyo city day</span>
+            <h1>Roppongi Art Late Day</h1>
+            <p class="page-subtitle">One of Tokyo&#x27;s strongest indoor-heavy days thanks to museum density and later evening options.</p>
+            <div class="card-badge-stack">
+              <div class="badge-row">
+                <span class="badge badge-strong-fit">strong fit</span>
+                <span class="badge badge-type">Tokyo city day</span>
+              </div>
+              <div class="badge-row">
+                <span class="badge badge-weather-rain-friendly">Rain-friendly</span>
+                <span class="badge badge-energy-packed">Packed day</span>
+                <span class="badge badge-reservation-recommended">Booking recommended</span>
+              </div>
+              <div class="status-list"><span class="badge badge-status">Late-night friendly</span></div>
+            </div>
+            <nav class="day-nav"><a href="../../index.html" class="secondary">Back to overview</a><a href="10-omotesando-nezu.html">Previous: 10</a><a href="12-nihonbashi-artizon-tokyo-station.html">Next: 12</a></nav>
+          </section>
+
+          <div class="page-layout">
+            <article class="page-content">
+              <h2>Suggested flow</h2>
+<ul>
+<li>Choose one primary museum:</li>
+<li><a href="https://www.mori.art.museum/en/">Mori Art Museum</a></li>
+<li><a href="https://www.nact.jp/english/">The National Art Center, Tokyo</a></li>
+<li>If energy is high, add <a href="https://www.2121designsight.jp/en/">21_21 DESIGN SIGHT</a>.</li>
+<li>Finish with dinner or drinks in Roppongi, Azabudai, or Nishi-Azabu rather than leaving immediately after the museum.</li>
+</ul>
+<h2>Opening-time considerations</h2>
+<ul>
+<li>Mori is especially useful because it often runs later than many other Tokyo museums.</li>
+<li>National Art Center timing depends on the specific exhibition, so confirm hours when you lock dates.</li>
+</ul>
+<h2>Why this is a fit</h2>
+<ul>
+<li>Excellent bad-weather day.</li>
+<li>Very strong for art, architecture, and nightlife without clubbing.</li>
+</ul>
+<h2>Extra planning notes</h2>
+<ul>
+<li>Best for: city days where you want one clear anchor plus plenty of room for food, coffee, or unplanned browsing.</li>
+<li>Pacing tip: this plan works well if you keep one major stop fixed and treat the rest as optional rather than trying to maximize every block.</li>
+<li>Easy adjustment: if energy drops or the weather shifts, shorten the walking portion and turn the day into one anchor activity plus a better dinner or cafe finish.</li>
+</ul>
+              
+    <div class="map-embed-wrap">
+      <h3>Embedded map</h3>
+      <div class="map-embed-box" data-map-embed-box>
+        <div class="map-embed-status" data-map-loading>
+          <div class="map-loading-indicator" aria-hidden="true"></div>
+          <p>Loading map...</p>
+        </div>
+        <div class="map-embed-status" data-map-error hidden>
+          <p class="map-embed-error">Failed to load embedded map.</p>
+          <p>The plain map links are still available on the right.</p>
+        </div>
+        <iframe
+          src="https://www.google.com/maps?q=Mori+Art+Museum&amp;output=embed"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen
+          title="Roppongi Art Late Day map"
+        ></iframe>
+      </div>
+      <p class="muted-note">The plain map links on the right always stay available. The embedded map loads from the web.</p>
+    </div>
+    
+              <nav class="day-nav"><a href="../../index.html" class="secondary">Back to overview</a><a href="10-omotesando-nezu.html">Previous: 10</a><a href="12-nihonbashi-artizon-tokyo-station.html">Next: 12</a></nav>
+            </article>
+
+            <aside class="sticky-panel">
+              <section class="page-panel">
+                <h2>Day snapshot</h2>
+                <div class="detail-grid">
+                  <div class="detail-item">
+                    <strong>Total cost</strong>
+                    <span><code><span class="currency-range" data-currency-range="true" data-jpy-min="4000" data-jpy-min-plus="false" data-jpy-max="10000" data-jpy-max-plus="false">JPY 4,000 to 10,000</span></code></span>
+                  </div>
+                  <div class="detail-item">
+                    <strong>Transit time</strong>
+                    <span><code>15 to 30 min each way</code></span>
+                  </div>
+                  <div class="detail-item">
+                    <strong>Weather fit</strong>
+                    <span>Rain-friendly</span>
+                  </div>
+                  <div class="detail-item">
+                    <strong>Energy level</strong>
+                    <span>Packed day</span>
+                  </div>
+                  <div class="detail-item">
+                    <strong>Reservations</strong>
+                    <span>Booking recommended</span>
+                  </div>
+                </div>
+                <h3>Status badges</h3>
+                <div class="status-list">
+                  <span class="badge badge-status">Late-night friendly</span>
+                </div>
+                <h3>Cost breakdown</h3>
+                <ul class="detail-list"><li>Transit per person: <code><span class="currency-range" data-currency-range="true" data-jpy-min="400" data-jpy-min-plus="false" data-jpy-max="800" data-jpy-max-plus="false">JPY 400 to 800</span></code></li><li>Food, admissions, and other: <code><span class="currency-range" data-currency-range="true" data-jpy-min="3600" data-jpy-min-plus="false" data-jpy-max="9200" data-jpy-max-plus="false">JPY 3,600 to 9,200</span></code></li></ul>
+                <h3>Transit breakdown</h3>
+                <ul class="detail-list"><li>Mode mix: mostly <code>subway + short district walks</code></li><li>Rough route: go <code>southwest</code> into <code>Roppongi</code>, stay concentrated between one or two museums and dinner/drinks nearby, then return without adding extra districts</li></ul>
+                <h3>Map links</h3>
+                <ul class="map-list">
+                  <li><a href="https://maps.google.com/?q=Mori+Art+Museum">Mori Art Museum</a></li><li><a href="https://maps.google.com/?q=The+National+Art+Center+Tokyo">The National Art Center, Tokyo</a></li>
+                </ul>
+                <p class="muted-note">All estimates are per person and assume a flexible Tokyo base rather than a fixed hotel district.</p>
+              </section>
+            </aside>
+          </div>
+        </div>
+        
+    </main>
+    <script src="../app.js"></script>
+  </body>
+ </html>

@@ -1,0 +1,170 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>21. Mt. Takao Nature Day</title>
+    <script>
+      (function () {
+        var theme = "dark";
+        try {
+          var urlTheme = new URLSearchParams(window.location.search).get("theme");
+          if (urlTheme === "dark" || urlTheme === "light") {
+            theme = urlTheme;
+          } else {
+            theme = localStorage.getItem("tokyo-trip-theme") || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+          }
+        } catch (error) {}
+        document.documentElement.dataset.theme = theme || "dark";
+        document.documentElement.style.colorScheme = document.documentElement.dataset.theme;
+      })();
+    </script>
+    <link rel="stylesheet" href="../vendor/pico.min.css">
+    <link rel="stylesheet" href="../styles.css">
+  </head>
+  <body>
+    <main class="container">
+      <header class="site-toolbar">
+        <a href="../../index.html" class="toolbar-brand">
+          <span>Tokyo Trip Plans</span>
+          <small>Local travel site</small>
+        </a>
+        <div class="toolbar-controls">
+          
+          <div class="theme-switch">
+            <label for="theme-switch">Theme</label>
+            <input id="theme-switch" type="checkbox" role="switch" data-theme-switch aria-label="Toggle dark mode">
+            <span data-theme-label>Dark mode</span>
+          </div>
+        </div>
+      </header>
+      
+        <div class="page-shell" data-day-page>
+          <div class="compact-day-bar" data-compact-day-bar aria-hidden="true">
+            <div class="compact-day-bar__inner">
+              <div class="compact-day-bar__title-group">
+                <span class="compact-day-bar__kicker">21 / Regional day trip</span>
+                <span class="compact-day-bar__title">Mt. Takao Nature Day</span>
+              </div>
+              <div class="compact-day-bar__meta">
+                <span class="badge badge-weather-dependent">weather-dependent</span><span class="badge badge-weather-snow-beautiful">Snow-beautiful</span><span class="badge badge-energy-packed">Packed day</span>
+              </div>
+            </div>
+          </div>
+          <section class="page-hero" data-page-hero>
+            <span class="hero-kicker">21 / Regional day trip</span>
+            <h1>Mt. Takao Nature Day</h1>
+            <p class="page-subtitle">The easiest satisfying nature day from Tokyo, especially good in crisp winter weather.</p>
+            <div class="card-badge-stack">
+              <div class="badge-row">
+                <span class="badge badge-weather-dependent">weather-dependent</span>
+                <span class="badge badge-type">Regional day trip</span>
+              </div>
+              <div class="badge-row">
+                <span class="badge badge-weather-snow-beautiful">Snow-beautiful</span>
+                <span class="badge badge-energy-packed">Packed day</span>
+                <span class="badge badge-reservation-none">No special booking pressure</span>
+              </div>
+              <div class="status-list"><span class="badge badge-status">Weather-sensitive</span><span class="badge badge-status">Cash useful</span></div>
+            </div>
+            <nav class="day-nav"><a href="../../index.html" class="secondary">Back to overview</a><a href="20-shibamata.html">Previous: 20</a><a href="22-okutama-mitake.html">Next: 22</a></nav>
+          </section>
+
+          <div class="page-layout">
+            <article class="page-content">
+              <h2>Suggested flow</h2>
+<ul>
+<li>Use the <a href="https://www.takaotozan.co.jp/course/">official Mt. Takao guide</a> to choose the route and cable-car decision.</li>
+<li>Hike or partially hike depending on weather and energy.</li>
+<li>Visit <a href="https://www.takaosan.or.jp/">Takaosan Yakuoin</a> on the mountain route.</li>
+<li>Keep dinner simple back in Tokyo.</li>
+</ul>
+<h2>Opening-time considerations</h2>
+<ul>
+<li>Start earlier than city days, especially in winter when daylight is shorter.</li>
+<li>Check wind, visibility, and any snow/ice warnings before committing.</li>
+</ul>
+<h2>Why this is a fit</h2>
+<ul>
+<li>Best easy-access nature day from Tokyo.</li>
+</ul>
+<h2>Extra planning notes</h2>
+<ul>
+<li>Best for: using a good weather window well and committing to one regional area instead of trying to combine too many side trips.</li>
+<li>Pacing tip: start earlier than on Tokyo city days and keep at least one part of the itinerary skippable in case transit, weather, or crowds slow you down.</li>
+<li>Easy adjustment: if conditions look poor in the morning, replace this with one of the indoor-heavy Tokyo plans and save the trip for a clearer day.</li>
+</ul>
+              
+    <div class="map-embed-wrap">
+      <h3>Embedded map</h3>
+      <div class="map-embed-box" data-map-embed-box>
+        <div class="map-embed-status" data-map-loading>
+          <div class="map-loading-indicator" aria-hidden="true"></div>
+          <p>Loading map...</p>
+        </div>
+        <div class="map-embed-status" data-map-error hidden>
+          <p class="map-embed-error">Failed to load embedded map.</p>
+          <p>The plain map links are still available on the right.</p>
+        </div>
+        <iframe
+          src="https://www.google.com/maps?q=Mount+Takao&amp;output=embed"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen
+          title="Mt. Takao Nature Day map"
+        ></iframe>
+      </div>
+      <p class="muted-note">The plain map links on the right always stay available. The embedded map loads from the web.</p>
+    </div>
+    
+              <nav class="day-nav"><a href="../../index.html" class="secondary">Back to overview</a><a href="20-shibamata.html">Previous: 20</a><a href="22-okutama-mitake.html">Next: 22</a></nav>
+            </article>
+
+            <aside class="sticky-panel">
+              <section class="page-panel">
+                <h2>Day snapshot</h2>
+                <div class="detail-grid">
+                  <div class="detail-item">
+                    <strong>Total cost</strong>
+                    <span><code><span class="currency-range" data-currency-range="true" data-jpy-min="2000" data-jpy-min-plus="false" data-jpy-max="5000" data-jpy-max-plus="false">JPY 2,000 to 5,000</span></code></span>
+                  </div>
+                  <div class="detail-item">
+                    <strong>Transit time</strong>
+                    <span><code>60 to 90 min each way</code></span>
+                  </div>
+                  <div class="detail-item">
+                    <strong>Weather fit</strong>
+                    <span>Snow-beautiful</span>
+                  </div>
+                  <div class="detail-item">
+                    <strong>Energy level</strong>
+                    <span>Packed day</span>
+                  </div>
+                  <div class="detail-item">
+                    <strong>Reservations</strong>
+                    <span>No special booking pressure</span>
+                  </div>
+                </div>
+                <h3>Status badges</h3>
+                <div class="status-list">
+                  <span class="badge badge-status">Weather-sensitive</span><span class="badge badge-status">Cash useful</span>
+                </div>
+                <h3>Cost breakdown</h3>
+                <ul class="detail-list"><li>Transit per person: <code><span class="currency-range" data-currency-range="true" data-jpy-min="800" data-jpy-min-plus="false" data-jpy-max="1600" data-jpy-max-plus="false">JPY 800 to 1,600</span></code></li><li>Food, snacks, and other: <code><span class="currency-range" data-currency-range="true" data-jpy-min="1200" data-jpy-min-plus="false" data-jpy-max="3400" data-jpy-max-plus="false">JPY 1,200 to 3,400</span></code></li></ul>
+                <h3>Transit breakdown</h3>
+                <ul class="detail-list"><li>Mode mix: mostly <code>train + mountain walking</code>, with optional <code>cable car/lift</code></li><li>Rough route: travel <code>far west</code> out of central Tokyo toward <code>Takaosanguchi</code>, then switch from rail travel to the mountain approach and trail network</li></ul>
+                <h3>Map links</h3>
+                <ul class="map-list">
+                  <li><a href="https://maps.google.com/?q=Mount+Takao">Mt. Takao</a></li><li><a href="https://maps.google.com/?q=Takaosan+Yakuoin">Takaosan Yakuoin</a></li>
+                </ul>
+                <p class="muted-note">All estimates are per person and assume a flexible Tokyo base rather than a fixed hotel district.</p>
+              </section>
+            </aside>
+          </div>
+        </div>
+        
+    </main>
+    <script src="../app.js"></script>
+  </body>
+ </html>
