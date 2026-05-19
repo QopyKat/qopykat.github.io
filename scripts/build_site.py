@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import re
 import shutil
+import json
 from dataclasses import dataclass
 from html import escape
 from pathlib import Path
@@ -16,6 +17,7 @@ SRC_DIR = ROOT / "tokyo-trip-plans"
 SITE_DIR = ROOT / "site"
 DAY_DIR = SITE_DIR / "day"
 ROOT_INDEX = ROOT / "index.html"
+PHOTO_DATA_PATH = ROOT / "scripts" / "day_photos.json"
 
 PICO_SOURCE = ROOT / "vendor" / "pico.min.css"
 PICO_OUTPUT = SITE_DIR / "vendor" / "pico.min.css"
@@ -559,6 +561,71 @@ main.container {
   margin-top: 0;
 }
 
+.photo-gallery {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.photo-gallery__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+}
+
+.photo-gallery__header h2 {
+  margin: 0;
+}
+
+.photo-gallery__header .muted-note {
+  margin: 0;
+}
+
+.photo-gallery__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 0.9rem;
+}
+
+.photo-card {
+  margin: 0;
+}
+
+.photo-card__link {
+  display: block;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid var(--line-soft);
+  border-radius: 1rem;
+  background: var(--surface-4);
+  box-shadow: 0 0.6rem 1.2rem var(--shadow-soft-3);
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.photo-card__link:hover,
+.photo-card__link:focus-visible {
+  transform: translateY(-0.15rem);
+  border-color: rgba(178, 65, 46, 0.35);
+  box-shadow: 0 1rem 1.8rem var(--shadow-soft);
+}
+
+.photo-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: var(--surface-3);
+}
+
+.photo-card figcaption {
+  padding: 0.8rem 0.9rem 0.9rem;
+  font-weight: 600;
+}
+
 .page-panel h2,
 .page-panel h3 {
   margin-top: 0;
@@ -1044,6 +1111,7 @@ class DayPlan:
     reservation: str
     reservation_label: str
     status_flags: list[str]
+    photos: list[dict[str, str]]
 
     @property
     def output_name(self) -> str:
@@ -1063,7 +1131,12 @@ class DayPlan:
 
 
 def main() -> None:
-    day_plans = [parse_day_plan(path) for path in sorted(SRC_DIR.glob("[0-9][0-9]-*.md")) if path.name != "00-overview.md"]
+    day_photos = load_day_photos()
+    day_plans = [
+        parse_day_plan(path, day_photos)
+        for path in sorted(SRC_DIR.glob("[0-9][0-9]-*.md"))
+        if path.name != "00-overview.md"
+    ]
     overview_md = (SRC_DIR / "00-overview.md").read_text()
 
     if SITE_DIR.exists():
@@ -1079,7 +1152,14 @@ def main() -> None:
     build_day_pages(day_plans)
 
 
-def parse_day_plan(path: Path) -> DayPlan:
+def load_day_photos() -> dict[str, list[dict[str, str]]]:
+    if not PHOTO_DATA_PATH.exists():
+        return {}
+    data = json.loads(PHOTO_DATA_PATH.read_text())
+    return {slug: [dict(item) for item in items] for slug, items in data.items()}
+
+
+def parse_day_plan(path: Path, day_photos: dict[str, list[dict[str, str]]]) -> DayPlan:
     lines = path.read_text().splitlines()
 
     title = lines[0].removeprefix("#").strip()
@@ -1118,6 +1198,7 @@ def parse_day_plan(path: Path) -> DayPlan:
         reservation=infer_reservation(day_number),
         reservation_label=RESERVATION_OPTIONS[infer_reservation(day_number)],
         status_flags=infer_status_flags(day_number),
+        photos=day_photos.get(path.stem, []),
     )
 
 
@@ -1484,6 +1565,8 @@ def build_day_pages(day_plans: list[DayPlan]) -> None:
             ]
         )
 
+        photo_gallery_html = render_photo_gallery(day.photos)
+
         content = f"""
         <div class="page-shell" data-day-page>
           <div class="compact-day-bar" data-compact-day-bar aria-hidden="true">
@@ -1518,6 +1601,7 @@ def build_day_pages(day_plans: list[DayPlan]) -> None:
 
           <div class="page-layout">
             <article class="page-content">
+              {photo_gallery_html}
               {render_markdown(day.body_md, "day")}
               {map_embed_html}
               {build_day_nav(prev_day, next_day)}
@@ -1583,6 +1667,38 @@ def render_detail_list(items: list[str]) -> str:
     for item in items:
         html_items.append(f"<li>{render_markdown_inline(item, 'day')}</li>")
     return f'<ul class="detail-list">{"".join(html_items)}</ul>'
+
+
+def render_photo_gallery(photos: list[dict[str, str]]) -> str:
+    if not photos:
+        return ""
+
+    figures: list[str] = []
+    for photo in photos:
+        src = escape(photo["src"])
+        href = escape(photo["href"])
+        caption = escape(photo["caption"])
+        figures.append(
+            f"""
+            <figure class="photo-card">
+              <a href="{href}" class="photo-card__link">
+                <img src="{src}" alt="{caption}" loading="lazy" referrerpolicy="no-referrer">
+                <figcaption>{caption}</figcaption>
+              </a>
+            </figure>
+            """
+        )
+
+    return f"""
+    <section class="photo-gallery" aria-labelledby="photo-gallery-title">
+      <div class="photo-gallery__header">
+        <h2 id="photo-gallery-title">Photo highlights</h2>
+      </div>
+      <div class="photo-gallery__grid">
+        {"".join(figures)}
+      </div>
+    </section>
+    """
 
 
 def render_markdown_inline(text: str, current_page: str) -> str:
