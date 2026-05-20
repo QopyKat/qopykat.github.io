@@ -6,7 +6,7 @@
       "caption": "Yanaka and Nezu"
     },
     {
-      "src": "https://nedujinja.or.jp/wp/wp-content/uploads/2023/10/romon_tsutsuji.jpg",
+      "src": "https://nedujinja.or.jp/wp-content/uploads/2023/10/torii.jpg",
       "href": "https://nedujinja.or.jp/",
       "caption": "Nezu Shrine"
     }
@@ -61,7 +61,7 @@
   ],
   "06-koenji-suginami-anime": [
     {
-      "src": "https://sam.or.jp/images/common/og_image01.jpg",
+      "src": "https://sam.or.jp/images/english/english_topimage.png",
       "href": "https://sam.or.jp/english_home",
       "caption": "Suginami Animation Museum"
     }
@@ -172,7 +172,7 @@
   ],
   "19-edo-tokyo-open-air": [
     {
-      "src": "https://www.tokyo-park.or.jp/park/koganei/assets/images/P004_1.webp",
+      "src": "https://www.tokyo-park.or.jp/park/koganei/assets/images/koganei01_mainbnr.webp",
       "href": "https://www.tokyo-park.or.jp/park/koganei/index.html",
       "caption": "Koganei Park"
     }
@@ -198,7 +198,7 @@
   ],
   "22-okutama-mitake": [
     {
-      "src": "https://www.okutama.gr.jp/common/image/ogp.png",
+      "src": "https://okutama.gr.jp/site/image/mainimagetop.svg",
       "href": "https://okutama.gr.jp/site/",
       "caption": "Okutama"
     }
@@ -231,7 +231,7 @@
   ],
   "26-nikko-world-heritage": [
     {
-      "src": "https://www.visitnikko.jp/en/static/img/img_home_keyimage.jpg",
+      "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Nikko_toshogu_shrine.jpg/1280px-Nikko_toshogu_shrine.jpg",
       "href": "https://www.visitnikko.jp/en/",
       "caption": "Nikko"
     }
@@ -312,7 +312,7 @@
       "caption": "animate Ikebukuro Flagship Store"
     },
     {
-      "src": "https://www.animate.co.jp/assets/img/spacegalleria/ogp.jpg?2024-06-10",
+      "src": "https://www.animate.co.jp/assets/img/spacegalleria/logo.svg",
       "href": "https://www.animate.co.jp/en/spacegalleria/ikebukuro/",
       "caption": "Space Galleria"
     }
@@ -345,7 +345,7 @@
   ],
   "38-waterbus-small-worlds": [
     {
-      "src": "https://www.gotokyo.org/en/story/walks-and-tours/take-the-water-bus-from-asakusa-to-odaiba/images/main.webp",
+      "src": "https://www.gotokyo.org/shared/site_gotokyo/images/story/walks-and-tours/waterfront/take-the-water-bus-from-asakusa-to-odaiba/sub_004.webp",
       "href": "https://www.gotokyo.org/en/story/walks-and-tours/waterfront/take-the-water-bus-from-asakusa-to-odaiba/index.html",
       "caption": "Asakusa water bus"
     },

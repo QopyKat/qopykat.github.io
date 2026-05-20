@@ -18,6 +18,8 @@ from typing import Any
 DEFAULT_TIMEOUT = 15.0
 DEFAULT_WORKERS = 8
 USER_AGENT = "Mozilla/5.0 (compatible; link-checker/1.0)"
+NON_RETRYABLE_GET_ERRORS = {403, 404, 410}
+NON_RETRYABLE_HEAD_ERRORS = {404, 410}
 
 
 @dataclass
@@ -144,7 +146,10 @@ def check_url(entry: LinkEntry, timeout: float) -> CheckResult:
         except urllib.error.HTTPError as exc:
             elapsed = time.perf_counter() - started_at
             last_error = f"HTTP {exc.code}"
-            if method == "GET":
+            if (
+                (method == "HEAD" and exc.code in NON_RETRYABLE_HEAD_ERRORS)
+                or (method == "GET" and exc.code in NON_RETRYABLE_GET_ERRORS)
+            ):
                 return CheckResult(
                     path=entry.path,
                     caption=entry.caption,
