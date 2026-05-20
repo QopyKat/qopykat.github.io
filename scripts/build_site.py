@@ -30,6 +30,12 @@ DAY_TYPE_RANGES = {
     "unusual": range(36, 39),
 }
 
+SPECIAL_DAY_TYPES = {
+    39: "tokyo-city",
+    40: "tokyo-city",
+    41: "day-trip",
+}
+
 DAY_TYPE_LABELS = {
     "tokyo-city": "Tokyo city day",
     "day-trip": "Regional day trip",
@@ -258,6 +264,8 @@ def normalize_body(body_md: str) -> str:
 
 
 def infer_day_type(number: int) -> str:
+    if number in SPECIAL_DAY_TYPES:
+        return SPECIAL_DAY_TYPES[number]
     for slug, valid_range in DAY_TYPE_RANGES.items():
         if number in valid_range:
             return slug
@@ -281,7 +289,7 @@ def infer_weather(number: int) -> str:
         return "rain-friendly"
     if number in {21, 22, 26, 27}:
         return "snow-beautiful"
-    if number in {7, 8, 9, 19, 23, 24, 25, 28, 29, 38}:
+    if number in {7, 8, 9, 19, 23, 24, 25, 28, 29, 38, 41}:
         return "clear-day"
     return "mixed"
 
@@ -308,7 +316,7 @@ def infer_status_flags(number: int) -> list[str]:
         flags.append("book-early")
     if number in {21, 22, 23, 24, 26, 27, 28, 38}:
         flags.append("weather-sensitive")
-    if number in {20, 21, 22, 23, 25, 26, 27, 31}:
+    if number in {20, 21, 22, 23, 25, 26, 27, 31, 41}:
         flags.append("cash-useful")
     if number in {28, 29, 30, 31}:
         flags.append("holiday-risk")

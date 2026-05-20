@@ -64,6 +64,9 @@ Assumptions used for planning: 14 to 21 nights in Tokyo, mid-range spending, Tok
 - `36` experimental: [Meguro parasite museum and weird-curious Tokyo day](/home/fry95/Documents/trav/tokyo-trip-plans/36-meguro-parasite-weird.md)
 - `37` experimental: [Tokiwaso manga history day](/home/fry95/Documents/trav/tokyo-trip-plans/37-tokiwaso-manga-history.md)
 - `38` experimental: [Water bus and Small Worlds future-Tokyo day](/home/fry95/Documents/trav/tokyo-trip-plans/38-waterbus-small-worlds.md)
+- `39` strong fit: [Asakusa and Sumida traditions day](/home/fry95/Documents/trav/tokyo-trip-plans/39-asakusa-sumida.md)
+- `40` strong fit: [Tsukiji breakfast and Ginza day](/home/fry95/Documents/trav/tokyo-trip-plans/40-tsukiji-ginza.md)
+- `41` experimental: [Kasama pottery and shrine day](/home/fry95/Documents/trav/tokyo-trip-plans/41-kasama-pottery.md)
 
 ## Estimated cost breakdown
 
