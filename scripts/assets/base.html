@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ title }}</title>
+    <script>
+      (function () {
+        var theme = "dark";
+        try {
+          var urlTheme = new URLSearchParams(window.location.search).get("theme");
+          if (urlTheme === "dark" || urlTheme === "light") {
+            theme = urlTheme;
+          } else {
+            theme = localStorage.getItem("tokyo-trip-theme") || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+          }
+        } catch (error) {}
+        document.documentElement.dataset.theme = theme || "dark";
+        document.documentElement.style.colorScheme = document.documentElement.dataset.theme;
+      })();
+    </script>
+    <link rel="stylesheet" href="{{ pico_css_url }}">
+    <link rel="stylesheet" href="{{ styles_href }}">
+  </head>
+  <body>
+    <main class="container">
+      <header class="site-toolbar">
+        <a href="{{ home_href }}" class="toolbar-brand">
+          <span>Tokyo Trip Plans</span>
+          <small>Local travel site</small>
+        </a>
+        <div class="toolbar-controls">
+          {{ toolbar_extra | safe }}
+          <div class="theme-switch">
+            <label for="theme-switch">Theme</label>
+            <input id="theme-switch" type="checkbox" role="switch" data-theme-switch aria-label="Toggle dark mode">
+            <span data-theme-label>Dark mode</span>
+          </div>
+        </div>
+      </header>
+      {{ content | safe }}
+    </main>
+    {% if script_href %}
+    <script src="{{ script_href }}"></script>
+    {% endif %}
+  </body>
+ </html>
