@@ -154,7 +154,7 @@ def check_url(entry: LinkEntry, timeout: float) -> CheckResult:
                     method=method,
                     elapsed_seconds=round(elapsed, 2),
                     content_type=exc.headers.get("Content-Type", "") if exc.headers else "",
-                    final_url=exc.geturl(), # TODO: The function `geturl` is deprecated: Deprecated since Python 3.9. Use `addinfourl.url` attribute instead.
+                    final_url=exc.url,
                     error=last_error,
                 )
         except urllib.error.URLError as exc:
