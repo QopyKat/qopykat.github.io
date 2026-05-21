@@ -1,7 +1,7 @@
 # 21. Mt. Takao Nature Day
 
 Short summary: The easiest satisfying nature day from Tokyo, especially good in crisp winter weather.  
-Tag: `weather-dependent`
+Tag: `hiking`
 
 - Estimated total cost per person: `JPY 2,000 to 5,000`
 - Cost breakdown:

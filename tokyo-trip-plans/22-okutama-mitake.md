@@ -1,7 +1,7 @@
 # 22. Okutama and Mt. Mitake Day
 
 Short summary: More mountain atmosphere than Takao, with better “escape from Tokyo” feeling but more transit.  
-Tag: `weather-dependent`
+Tag: `hiking`
 
 - Estimated total cost per person: `JPY 2,500 to 6,000`
 - Cost breakdown:

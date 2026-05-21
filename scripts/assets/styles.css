@@ -63,6 +63,7 @@ html[data-theme="dark"] {
 html[data-theme="light"],
 html[data-theme="dark"] {
   --badge-strong: #245f4b;
+  --badge-hiking: #2f6b3e;
   --badge-experimental: #8a4f17;
   --badge-weather: #305d8e;
   --badge-type: #5d4b73;
@@ -354,6 +355,10 @@ main.container {
 
 .badge-strong-fit {
   background: var(--badge-strong);
+}
+
+.badge-hiking {
+  background: var(--badge-hiking);
 }
 
 .badge-experimental {

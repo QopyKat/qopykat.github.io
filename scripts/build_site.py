@@ -34,6 +34,7 @@ SPECIAL_DAY_TYPES = {
     39: "tokyo-city",
     40: "tokyo-city",
     41: "day-trip",
+    42: "day-trip",
 }
 
 DAY_TYPE_LABELS = {
@@ -66,7 +67,6 @@ RESERVATION_OPTIONS = {
 STATUS_LABELS = {
     "book-early": "Book early",
     "weather-sensitive": "Weather-sensitive",
-    "cash-useful": "Cash useful",
     "holiday-risk": "Holiday risk",
     "shopping-heavy": "Shopping-heavy",
     "late-night-friendly": "Late-night friendly",
@@ -101,6 +101,7 @@ class DayPlan:
     filename: str
     title: str
     short_title: str
+    title_qualifier: str
     summary: str
     tag: str
     total_cost: str
@@ -120,6 +121,7 @@ class DayPlan:
     reservation_label: str
     status_flags: list[str]
     photos: list[dict[str, str]]
+    highlights: list[str]
 
     @property
     def output_name(self) -> str:
@@ -136,6 +138,12 @@ class DayPlan:
     @property
     def tag_slug(self) -> str:
         return self.tag.lower().replace(" ", "-")
+
+    @property
+    def display_title(self) -> str:
+        if self.title_qualifier:
+            return f"{self.short_title} ({self.title_qualifier})"
+        return self.short_title
 
 
 def main() -> None:
@@ -181,6 +189,8 @@ def parse_day_plan(path: Path, day_photos: dict[str, list[dict[str, str]]]) -> D
     map_links = extract_markdown_links(extract_nested_list(lines, "- Map links:"))
     body_md = normalize_body(extract_body_markdown(lines))
     day_number = int(path.name.split("-", 1)[0])
+    title_qualifier = infer_title_qualifier(lines, short_title, day_number)
+    highlights = extract_fit_highlights(lines)
 
     return DayPlan(
         number=day_number,
@@ -188,6 +198,7 @@ def parse_day_plan(path: Path, day_photos: dict[str, list[dict[str, str]]]) -> D
         filename=path.name,
         title=title,
         short_title=short_title,
+        title_qualifier=title_qualifier,
         summary=summary,
         tag=tag,
         total_cost=total_cost,
@@ -207,7 +218,57 @@ def parse_day_plan(path: Path, day_photos: dict[str, list[dict[str, str]]]) -> D
         reservation_label=RESERVATION_OPTIONS[infer_reservation(day_number)],
         status_flags=infer_status_flags(day_number),
         photos=day_photos.get(path.stem, []),
+        highlights=highlights,
     )
+
+
+def infer_title_qualifier(lines: list[str], short_title: str, day_number: int) -> str:
+    title_lower = short_title.lower()
+    full_text = "\n".join(lines).lower()
+
+    if "christmas eve" in title_lower:
+        return "Dec 24"
+    if "christmas day" in title_lower:
+        return "Dec 25"
+    if "new year's eve" in title_lower or "new years eve" in title_lower:
+        return "Dec 31"
+    if "new year's day" in title_lower or "new years day" in title_lower:
+        return "Jan 1"
+
+    if "closed on mondays" in full_text or "closed on monday" in full_text:
+        return "Not Monday"
+
+    if day_number == 31 and "january 1" in full_text:
+        return "Jan 1"
+    if day_number == 30 and "december 31" in full_text:
+        return "Dec 31"
+    if day_number == 28 and "december 24" in full_text:
+        return "Dec 24"
+
+    return ""
+
+
+def extract_fit_highlights(lines: list[str]) -> list[str]:
+    for index, line in enumerate(lines):
+        if line.strip() == "Why this is a fit:":
+            highlights: list[str] = []
+            for inner in lines[index + 1 :]:
+                stripped = inner.strip()
+                if not stripped:
+                    if highlights:
+                        break
+                    continue
+                if stripped.startswith("## "):
+                    break
+                if stripped.startswith("- "):
+                    highlights.append(stripped[2:].strip())
+                    continue
+                if highlights:
+                    break
+            if highlights:
+                return highlights
+            break
+    return []
 
 
 def extract_value(lines: list[str], prefix: str) -> str:
@@ -316,8 +377,6 @@ def infer_status_flags(number: int) -> list[str]:
         flags.append("book-early")
     if number in {21, 22, 23, 24, 26, 27, 28, 38}:
         flags.append("weather-sensitive")
-    if number in {20, 21, 22, 23, 25, 26, 27, 31, 41}:
-        flags.append("cash-useful")
     if number in {28, 29, 30, 31}:
         flags.append("holiday-risk")
     if number in {5, 13, 14, 15, 32, 33, 34, 35}:
@@ -415,7 +474,7 @@ def build_browser(day_plans: list[DayPlan]) -> str:
     for day in day_plans:
         search_text = " ".join(
             [
-                day.short_title,
+                day.display_title,
                 day.summary,
                 day.tag,
                 day.day_type_label,
@@ -458,7 +517,7 @@ def build_browser(day_plans: list[DayPlan]) -> str:
                 {f'<div class="status-list">{status_badges}</div>' if status_badges else ""}
               </div>
               <div>
-                <h4><a href="site/day/{escape(day.output_name)}">{escape(day.display_id)}. {escape(day.short_title)}</a></h4>
+                <h4><a href="site/day/{escape(day.output_name)}">{escape(day.display_id)}. {escape(day.display_title)}</a></h4>
                 <p class="card-summary">{escape(day.summary)}</p>
               </div>
                 <div class="meta-grid">
@@ -495,6 +554,7 @@ def build_browser(day_plans: list[DayPlan]) -> str:
             <option value="strong fit">Strong fit</option>
             <option value="experimental">Experimental</option>
             <option value="weather-dependent">Weather-dependent</option>
+            <option value="hiking">Hiking</option>
           </select>
         </div>
         <div>
@@ -583,7 +643,7 @@ def build_day_pages(day_plans: list[DayPlan]) -> None:
             <div class="compact-day-bar__inner">
               <div class="compact-day-bar__title-group">
                 <span class="compact-day-bar__kicker">{escape(day.display_id)} / {escape(day.day_type_label)}</span>
-                <span class="compact-day-bar__title">{escape(day.short_title)}</span>
+                <span class="compact-day-bar__title">{escape(day.display_title)}</span>
               </div>
               <div class="compact-day-bar__meta">
                 {compact_bar_meta}
@@ -592,7 +652,7 @@ def build_day_pages(day_plans: list[DayPlan]) -> None:
           </div>
           <section class="page-hero" data-page-hero>
             <span class="hero-kicker">{escape(day.display_id)} / {escape(day.day_type_label)}</span>
-            <h1>{escape(day.short_title)}</h1>
+            <h1>{escape(day.display_title)}</h1>
             <p class="page-subtitle">{escape(day.summary)}</p>
             <div class="card-badge-stack">
               <div class="badge-row">
@@ -611,6 +671,7 @@ def build_day_pages(day_plans: list[DayPlan]) -> None:
 
           <div class="page-layout">
             <article class="page-content">
+              {render_highlights_section(day.highlights)}
               {photo_gallery_html}
               {render_markdown(day.body_md, "day")}
               {map_embed_html}
@@ -711,6 +772,20 @@ def render_photo_gallery(photos: list[dict[str, str]]) -> str:
     """
 
 
+def render_highlights_section(highlights: list[str]) -> str:
+    if not highlights:
+        return ""
+    items = "".join(f"<li>{render_markdown_inline(item, 'day')}</li>" for item in highlights)
+    return f"""
+    <section class="day-highlights" aria-labelledby="day-highlights-title">
+      <h2 id="day-highlights-title">Highlights</h2>
+      <ul class="detail-list">
+        {items}
+      </ul>
+    </section>
+    """
+
+
 def render_markdown_inline(text: str, current_page: str) -> str:
     html = render_markdown(text, current_page)
     if html.startswith("<p>") and html.endswith("</p>"):
@@ -769,7 +844,7 @@ def build_map_embed(day: DayPlan) -> str:
           loading="lazy"
           referrerpolicy="no-referrer-when-downgrade"
           allowfullscreen
-          title="{escape(day.short_title)} map"
+          title="{escape(day.display_title)} map"
         ></iframe>
       </div>
       <p class="muted-note">The plain map links on the right always stay available. The embedded map loads from the web.</p>
